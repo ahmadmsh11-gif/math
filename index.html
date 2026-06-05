@@ -28,8 +28,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
-        h2 { text-align: center; color: var(--secondary); font-size: 1.1rem; margin-top: 0; margin-bottom: 30px; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; font-size: 1.6rem; }
+        h2 { text-align: center; color: var(--secondary); font-size: 1.2rem; margin-top: 10px; margin-bottom: 30px; line-height: 1.5; }
         .quiz-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; background: #eef2f7; padding: 10px; border-radius: 6px; }
         .question-card { display: none; }
         .question-card.active { display: block; }
@@ -64,7 +64,7 @@
 
 <div class="container">
     <h1>📝 اختبار الرياضيات التفاعلي الشامل</h1>
-    <h2>البطل تميم أبو سعد وزملائه الأذكياء 🌟</h2>
+    <h2>🎁 إهداء من زميلكم تميم (أبو سعد) إلى زملائه الأذكياء 🌟</h2>
 
     <div id="quiz-box">
         <div class="quiz-info">
@@ -121,7 +121,7 @@
 
     function initQuiz() {
         const container = document.getElementById('questions-container');
-        container.innerHTML = ''; // تنظيف المحتوى القديم
+        container.innerHTML = ''; 
         quizData.forEach((data, index) => {
             const card = document.createElement('div');
             card.className = `question-card ${index === 0 ? 'active' : ''}`;
