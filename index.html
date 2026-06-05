@@ -63,6 +63,7 @@
 </head>
 <body>
 
+    <!-- الشاشة الافتتاحية -->
     <div id="intro-screen">
         <h1>تحدي الأبطال 🏆</h1>
         <p class="intro-dedication">✨ إهداء من زميلكم تميم (أبو سعد) إلى زملائه عباقرة الرياضيات ✨</p>
@@ -79,6 +80,7 @@
         <button id="start-btn" onclick="startQuiz()">ابدأ المراجعة 🚀</button>
     </div>
 
+    <!-- شاشة الاختبار -->
     <div id="quiz-screen">
         <h1 class="quiz-title">تحدي الأبطال 🏆</h1>
         <div class="score-board">النقاط: <span id="points" style="color: #f1c40f;">0</span></div>
@@ -128,9 +130,9 @@ const questions = [
     { "page": 180, "q_num": 5, "question": "1/10 ككسر عشري؟", "isBook": true, "options": ["0.1", "0.01", "1.0", "0.11"], "answer": "0.1", "exp": "جزء واحد من عشرة يُكتب 0.1." },
     { "page": 180, "q_num": 6, "question": "2/10 ككسر عشري؟", "isBook": true, "options": ["0.2", "0.02", "2.0", "0.22"], "answer": "0.2", "exp": "جزأين من عشرة تُكتب 0.2." },
     { "page": 180, "q_num": 7, "question": "7/10 ككسر عشري؟", "isBook": true, "options": ["0.7", "0.07", "7.0", "0.77"], "answer": "0.7", "exp": "سبعة أجزاء من عشرة تُكتب 0.7." },
-    { "page": 178, "q_num": 1, "question": "الكسر (7/10)؟", "isBook": true, "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "exp": "عدد الأجزاء الملونة 7، والعدد الكلي 10، إذن الكسر 7/10." },
-    { "page": 178, "q_num": 2, "question": "الكسر (4/10)؟", "isBook": true, "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "exp": "عدد الأجزاء الملونة 4 من أصل 10." },
-    { "page": 178, "q_num": 3, "question": "كسر الشبكة (78/100)؟", "isBook": true, "options": ["78/100", "22/100", "50/100", "7/10"], "answer": "78/100", "exp": "شبكة المئة بها 78 مربع ملون من أصل 100." },
+    { "page": 178, "q_num": 1, "question": "ما الكسر الذي يمثل الجزء المظلل في الشكل؟", "isBook": true, "draw10Grid": 7, "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "exp": "عدد الأجزاء الملونة 7 من أصل 10 أجزاء متطابقة، إذن الكسر 7/10." },
+    { "page": 178, "q_num": 2, "question": "ما الكسر الذي يمثل الجزء المظلل في الشكل؟", "isBook": true, "draw10Grid": 4, "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "exp": "عدد الأجزاء الملونة 4 من أصل 10 أجزاء متطابقة، إذن الكسر 4/10." },
+    { "page": 178, "q_num": 3, "question": "ما الكسر الذي يمثل الجزء المظلل في الشبكة؟", "isBook": true, "drawGrid": true, "options": ["68/100", "32/100", "78/100", "6/10"], "answer": "68/100", "exp": "الشبكة مكونة من 100 مربع، الملون منها بالأخضر 68 مربع، إذن الكسر هو 68/100." },
     { "page": 185, "q_num": 14, "question": "73/100 ككسر عشري؟", "isBook": true, "options": ["0.73", "0.073", "7.3", "0.37"], "answer": "0.73", "exp": "القسمة على 100 تعني وضع الفاصلة بعد رقمين من اليمين (0.73)." },
     { "page": 185, "q_num": 15, "question": "0.10 ككسر اعتيادي؟", "isBook": true, "options": ["1/100", "10/100", "10/10", "1/10"], "answer": "10/100", "exp": "0.10 تعني 10 أجزاء من المئة، وتُكتب ككسر 10/100." },
     { "page": 185, "q_num": 16, "question": "في صفحة 185، انظر الرسم، إذا قرأت فاطمة 35 كتاباً من أصل 100، فما الكسر الذي يمثل الكتب غير الأدبية؟", "isBook": true, "options": ["35/100", "65/100", "100/65", "65/10"], "answer": "65/100", "exp": "نطرح 35 من 100 لنجد الباقي (الكتب غير الأدبية) وهو 65. إذن الكسر هو 65/100." }
@@ -153,11 +155,38 @@ function loadQ() {
     let q = questions[currentIdx];
     
     // نمرر السؤال على دالة تنسيق الكسور
-    document.getElementById('question-text').innerHTML = (currentIdx + 1) + ". " + formatFractions(q.question);
+    let qText = (currentIdx + 1) + ". " + formatFractions(q.question);
+    
+    // برمجة رسم شبكة المئة (سؤال 36)
+    if(q.drawGrid) {
+        let gridHTML = '<div style="display:grid; grid-template-columns:repeat(10, 1fr); width:180px; height:180px; border:2px solid #2c3e50; margin: 20px auto; direction: rtl;">';
+        for(let i=0; i<100; i++) {
+            let row = Math.floor(i/10);
+            let col = i%10;
+            // تلوين 68 مربع بناءً على شكل الكتاب بالضبط
+            let isGreen = (row < 2 && col < 6) || (row >= 2 && col < 7);
+            let color = isGreen ? '#27ae60' : '#ffffff';
+            gridHTML += `<div style="background-color:${color}; border:1px solid #7f8c8d; box-sizing: border-box;"></div>`;
+        }
+        gridHTML += '</div>';
+        qText += gridHTML;
+    } 
+    // برمجة رسم شريط الأعشار (سؤال 34 و 35)
+    else if (q.draw10Grid !== undefined) {
+        let gridHTML = '<div style="display:flex; width:280px; height:40px; border:2px solid #2c3e50; margin: 20px auto; direction: rtl;">';
+        for(let i=0; i<10; i++) {
+            let color = (i < q.draw10Grid) ? '#27ae60' : '#ffffff';
+            gridHTML += `<div style="flex:1; background-color:${color}; border:1px solid #7f8c8d; box-sizing: border-box;"></div>`;
+        }
+        gridHTML += '</div>';
+        qText += gridHTML;
+    }
+
+    document.getElementById('question-text').innerHTML = qText;
     document.getElementById('page-info').innerText = "صفحة " + q.page + " | سؤال " + q.q_num;
     
     let tip = document.getElementById('book-tip');
-    if(q.isBook) { 
+    if(q.isBook && !q.drawGrid && q.draw10Grid === undefined) { 
         tip.style.display = "block"; 
         tip.innerHTML = "🔍 <b>استعن بالكتاب:</b> افتح صفحة " + q.page + " وانظر لسؤال " + q.q_num; 
     } else { 
@@ -172,7 +201,6 @@ function loadQ() {
     q.options.forEach(o => {
         let btn = document.createElement('button'); 
         btn.className = "option-btn";
-        // نمرر الخيارات على دالة تنسيق الكسور لتظهر مرتبة داخل الأزرار
         btn.innerHTML = formatFractions(o);
         btn.onclick = () => {
             let allBtns = cont.querySelectorAll('.option-btn');
@@ -181,7 +209,6 @@ function loadQ() {
             let f = document.getElementById('feedback'); 
             f.style.display = "block";
             
-            // نمرر الإجابة والشرح على دالة الكسور
             let formattedAnswer = formatFractions(q.answer);
             let formattedExp = formatFractions(q.exp);
 
