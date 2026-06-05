@@ -2,34 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تحدي الأبطال - تميم</title>
+    <title>تحدي الأبطال - عباقرة الرياضيات</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background: linear-gradient(135deg, #74ebd5, #9face6); min-height: 100vh; color: #333; margin: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #74ebd5, #9face6); 
+            min-height: 100vh; 
+            color: #333; 
+            margin: 0; 
+        }
+        
+        /* تنسيقات الشاشة الافتتاحية */
+        #intro-screen {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin: 50px auto;
+            max-width: 650px;
+            line-height: 1.8;
+        }
+        #intro-screen h1 { color: #2980b9; font-size: 2.8em; margin-bottom: 10px; text-shadow: none; }
+        .intro-dedication { color: #e67e22; font-weight: bold; font-size: 1.4em; margin-bottom: 20px; }
+        .intro-note { background: #fdf2e9; border-right: 5px solid #e67e22; padding: 15px; margin: 20px 0; font-weight: bold; color: #d35400; text-align: right; border-radius: 10px; }
+        .intro-thanks { background: #e8f8f5; border-right: 5px solid #1abc9c; padding: 15px; margin: 20px 0; font-weight: bold; color: #16a085; text-align: right; border-radius: 10px; font-size: 1.2em;}
+        #start-btn { background: #e74c3c; color: white; padding: 15px 40px; font-size: 1.5em; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); transition: 0.3s; }
+        #start-btn:hover { transform: scale(1.05); background: #c0392b; }
+
+        /* تنسيقات شاشة الاختبار */
+        #quiz-screen { display: none; }
         .score-board { font-size: 1.8em; font-weight: bold; color: #fff; background: rgba(0,0,0,0.3); padding: 15px 30px; border-radius: 50px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .question-box { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin: 0 auto; max-width: 650px; }
-        h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 2.5em; margin-top: 0; }
-        .gift-msg { color: #ffeb3b; font-weight: bold; font-size: 1.3em; margin-bottom: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
-        button.option-btn { display: block; margin: 12px auto; padding: 18px; width: 90%; border-radius: 15px; border: 2px solid #ecf0f1; background: #fdfdfd; color: #2c3e50; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        h1.quiz-title { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 2.5em; margin-top: 0; }
+        
+        button.option-btn { display: block; margin: 12px auto; padding: 15px; width: 90%; border-radius: 15px; border: 2px solid #ecf0f1; background: #fdfdfd; color: #2c3e50; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         button.option-btn:hover:not(:disabled) { background: #e0f7fa; border-color: #00bcd4; transform: scale(1.02); }
         button.option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        
         #feedback { font-size: 1.2em; line-height: 1.8; padding: 20px; margin-top: 20px; border-radius: 15px; display: none; text-align: right; }
         .book-tip { color: #d35400; font-weight: bold; border: 2px dashed #e67e22; padding: 15px; margin: 15px 0; background: #fdf2e9; border-radius: 10px; }
         #next-btn { font-size: 1.2em; font-weight: bold; padding: 15px; border-radius: 15px; border: none; cursor: pointer; transition: 0.3s; margin: 20px auto 0; width: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         #next-btn:hover { transform: translateY(-3px); }
+
+        /* تنسيق الكسور العمودية الجميل */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-size: 0.9em;
+            line-height: 1.2;
+            font-weight: bold;
+        }
+        .frac span { padding: 0 5px; }
+        .frac .bottom { border-top: 2px solid currentColor; }
     </style>
 </head>
 <body>
-    <h1>تحدي الأبطال 🏆</h1>
-    <p class="gift-msg">✨ إهداء من زميلكم تميم (أبو سعد) إلى زملائه الأذكياء ✨</p>
-    <div class="score-board">النقاط: <span id="points" style="color: #f1c40f;">0</span></div>
 
-    <div class="question-box">
-        <h2 id="question-text" style="color: #2c3e50; line-height: 1.5;">السؤال</h2>
-        <p id="page-info" style="font-weight:bold; color:#7f8c8d; font-size: 0.9em;"></p>
-        <div id="book-tip" class="book-tip" style="display:none;"></div>
-        <div id="options-container"></div>
-        <div id="feedback"></div>
-        <button id="next-btn" style="display:none; background-color: #27ae60; color: white;" onclick="nextQuestion()">السؤال التالي ➡</button>
+    <!-- الشاشة الافتتاحية -->
+    <div id="intro-screen">
+        <h1>تحدي الأبطال 🏆</h1>
+        <p class="intro-dedication">✨ إهداء من زميلكم تميم (أبو سعد) إلى زملائه عباقرة الرياضيات ✨</p>
+        
+        <div class="intro-thanks">
+            🌹 شكر وتقدير خاص لمعلم المادة الأستاذ الفاضل: <b>محمد عبدالواحد</b>، على جهوده وعطائه.
+        </div>
+
+        <div class="intro-note">
+            ⚠️ <b>ملاحظة هامة:</b><br>
+            هذا العمل هو اجتهاد شخصي يهدف إلى المساعدة في المراجعة وتثبيت المعلومات، ولكنه <b>لا يغني أبداً</b> عن مراجعة الكتاب المدرسي أو الاستغناء عن شرح وتوجيهات معلم المادة.
+        </div>
+
+        <button id="start-btn" onclick="startQuiz()">ابدأ المراجعة 🚀</button>
+    </div>
+
+    <!-- شاشة الاختبار -->
+    <div id="quiz-screen">
+        <h1 class="quiz-title">تحدي الأبطال 🏆</h1>
+        <div class="score-board">النقاط: <span id="points" style="color: #f1c40f;">0</span></div>
+
+        <div class="question-box">
+            <h2 id="question-text" style="color: #2c3e50; line-height: 1.6;">السؤال</h2>
+            <p id="page-info" style="font-weight:bold; color:#7f8c8d; font-size: 0.9em;"></p>
+            <div id="book-tip" class="book-tip" style="display:none;"></div>
+            <div id="options-container"></div>
+            <div id="feedback"></div>
+            <button id="next-btn" style="display:none; background-color: #27ae60; color: white;" onclick="nextQuestion()">السؤال التالي ➡</button>
+        </div>
     </div>
 
 <script>
@@ -55,7 +118,7 @@ const questions = [
     { "page": 122, "q_num": 6, "question": "حجم مجسم 18 مكعب؟", "isBook": true, "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو إجمالي عدد الوحدات المكعبة التي يتكون منها المجسم." },
     { "page": 122, "q_num": 7, "question": "حجم مجسم 27 مكعب؟", "isBook": true, "options": ["25", "27", "30", "24"], "answer": "27", "exp": "المجسم مكون من 3 طبقات كل طبقة بها 9 مكعبات، المجموع 27." },
     { "page": 122, "q_num": 8, "question": "تقدير حجم مجسم؟", "isBook": true, "options": ["8", "10", "12", "6"], "answer": "8", "exp": "التقدير يكون بعد المكعبات الظاهرة وتوقع المكعبات المخفية خلفها." },
-    { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "isBook": true, "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "لإيجاد كسر مكافئ نضرب البسط والمقام في نفس العدد (مثلاً نضرب في 2)." },
+    { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "isBook": true, "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "لإيجاد كسر مكافئ نضرب البسط والمقام في نفس العدد (نضرب في 2 يعطينا 2/6)." },
     { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "isBook": true, "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "إذا وحدنا المقامات، 1/2 تصبح 2/4، ومن الواضح أن 2/4 أصغر من 3/4." },
     { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16)؟", "isBook": true, "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "1/16 هو أصغر كسر، يليه 3/4، والأكبر هو 7/8." },
     { "page": 160, "q_num": 5, "question": "تحويل 7/10 لعشري؟", "isBook": false, "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "exp": "القسمة على 10 تعني وضع الفاصلة بعد خانة واحدة من اليمين (0.7)." },
@@ -76,9 +139,23 @@ const questions = [
 ];
 
 let currentIdx = 0, score = 0;
+
+// دالة سحرية لتحويل أي نص مثل 1/2 إلى كسر عمودي مرتب
+function formatFractions(text) {
+    return text.replace(/(\d+)\/(\d+)/g, '<span class="frac"><span>$1</span><span class="bottom">$2</span></span>');
+}
+
+function startQuiz() {
+    document.getElementById('intro-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    loadQ();
+}
+
 function loadQ() {
     let q = questions[currentIdx];
-    document.getElementById('question-text').innerText = (currentIdx + 1) + ". " + q.question;
+    
+    // نمرر السؤال على دالة تنسيق الكسور
+    document.getElementById('question-text').innerHTML = (currentIdx + 1) + ". " + formatFractions(q.question);
     document.getElementById('page-info').innerText = "صفحة " + q.page + " | سؤال " + q.q_num;
     
     let tip = document.getElementById('book-tip');
@@ -97,26 +174,30 @@ function loadQ() {
     q.options.forEach(o => {
         let btn = document.createElement('button'); 
         btn.className = "option-btn";
-        btn.innerText = o;
+        // نمرر الخيارات على دالة تنسيق الكسور لتظهر مرتبة داخل الأزرار
+        btn.innerHTML = formatFractions(o);
         btn.onclick = () => {
-            // تعطيل جميع الأزرار بعد الاختيار
             let allBtns = cont.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
 
             let f = document.getElementById('feedback'); 
             f.style.display = "block";
             
+            // نمرر الإجابة والشرح على دالة الكسور
+            let formattedAnswer = formatFractions(q.answer);
+            let formattedExp = formatFractions(q.exp);
+
             if(o === q.answer) { 
                 score += 10; 
                 f.style.backgroundColor = "#d4edda"; 
                 f.style.color = "#155724"; 
                 f.style.border = "2px solid #c3e6cb";
-                f.innerHTML = "✅ <b>أحسنت يا بطل! إجابة صحيحة.</b><br><br>💡 <b>طريقة الحل:</b> " + q.exp; 
+                f.innerHTML = "✅ <b>أحسنت يا بطل! إجابة صحيحة.</b><br><br>💡 <b>طريقة الحل:</b> " + formattedExp; 
             } else { 
                 f.style.backgroundColor = "#f8d7da"; 
                 f.style.color = "#721c24"; 
                 f.style.border = "2px solid #f5c6cb";
-                f.innerHTML = "❌ <b>للأسف، إجابة خاطئة.</b><br><br>🎯 <b>الإجابة الصحيحة هي:</b> (" + q.answer + ")<br>💡 <b>طريقة الحل:</b> " + q.exp; 
+                f.innerHTML = "❌ <b>للأسف، إجابة خاطئة.</b><br><br>🎯 <b>الإجابة الصحيحة هي:</b> (" + formattedAnswer + ")<br>💡 <b>طريقة الحل:</b> " + formattedExp; 
             }
             
             document.getElementById('points').innerText = score;
@@ -131,17 +212,16 @@ function nextQuestion() {
     if(currentIdx < questions.length) {
         loadQ();
     } else { 
-        document.body.innerHTML = `
-            <div class="question-box" style="margin-top:50px;">
+        document.getElementById('quiz-screen').innerHTML = `
+            <div class="question-box" style="margin-top:20px;">
                 <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
                 <h2 style="color:#27ae60; font-size:2em;">مجموع نقاطك: ${score} من ${questions.length * 10}</h2>
-                <p style="font-size:1.2em; color:#7f8c8d; margin-top:20px;">كفو يا بطل! استمر في الإبداع.</p>
-                <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:50%; margin-top:30px;">إعادة التحدي 🔄</button>
+                <p style="font-size:1.2em; color:#7f8c8d; margin-top:20px;">كفو يا بطل! عباقرة الرياضيات دائماً في القمة.</p>
+                <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:50%; margin-top:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">إعادة التحدي 🔄</button>
             </div>
         `; 
     }
 }
-loadQ();
 </script>
 </body>
 </html>
