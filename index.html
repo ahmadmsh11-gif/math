@@ -2,96 +2,144 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تحدي الأبطال</title>
+    <title>تحدي الأبطال - تميم</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
-        .score-board { font-size: 1.5em; color: #2c3e50; font-weight: bold; margin-bottom: 20px; }
-        .question-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 0 auto; max-width: 600px; }
-        button { display: block; margin: 10px auto; padding: 15px; width: 90%; border-radius: 10px; border: 1px solid #bdc3c7; cursor: pointer; }
-        #feedback { font-weight: bold; padding: 15px; margin-top: 20px; border-radius: 8px; display: none; }
-        .book-tip { color: #c0392b; font-weight: bold; border: 2px dashed #c0392b; padding: 10px; margin: 10px 0; display:none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background: linear-gradient(135deg, #74ebd5, #9face6); min-height: 100vh; color: #333; margin: 0; }
+        .score-board { font-size: 1.8em; font-weight: bold; color: #fff; background: rgba(0,0,0,0.3); padding: 15px 30px; border-radius: 50px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .question-box { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin: 0 auto; max-width: 650px; }
+        h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 2.5em; margin-top: 0; }
+        .gift-msg { color: #ffeb3b; font-weight: bold; font-size: 1.3em; margin-bottom: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        button.option-btn { display: block; margin: 12px auto; padding: 18px; width: 90%; border-radius: 15px; border: 2px solid #ecf0f1; background: #fdfdfd; color: #2c3e50; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button.option-btn:hover:not(:disabled) { background: #e0f7fa; border-color: #00bcd4; transform: scale(1.02); }
+        button.option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        #feedback { font-size: 1.2em; line-height: 1.8; padding: 20px; margin-top: 20px; border-radius: 15px; display: none; text-align: right; }
+        .book-tip { color: #d35400; font-weight: bold; border: 2px dashed #e67e22; padding: 15px; margin: 15px 0; background: #fdf2e9; border-radius: 10px; }
+        #next-btn { font-size: 1.2em; font-weight: bold; padding: 15px; border-radius: 15px; border: none; cursor: pointer; transition: 0.3s; margin: 20px auto 0; width: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        #next-btn:hover { transform: translateY(-3px); }
     </style>
 </head>
 <body>
-    <h1>تحدي الأبطال</h1>
-    <p>إهداء من زميلكم تميم (أبو سعد) إلى زملائه الأذكياء</p>
-    <div class="score-board">النقاط: <span id="points">0</span></div>
+    <h1>تحدي الأبطال 🏆</h1>
+    <p class="gift-msg">✨ إهداء من زميلكم تميم (أبو سعد) إلى زملائه الأذكياء ✨</p>
+    <div class="score-board">النقاط: <span id="points" style="color: #f1c40f;">0</span></div>
+
     <div class="question-box">
-        <h2 id="question-text">السؤال</h2>
-        <p id="page-info"></p>
-        <div id="book-tip" class="book-tip"></div>
+        <h2 id="question-text" style="color: #2c3e50; line-height: 1.5;">السؤال</h2>
+        <p id="page-info" style="font-weight:bold; color:#7f8c8d; font-size: 0.9em;"></p>
+        <div id="book-tip" class="book-tip" style="display:none;"></div>
         <div id="options-container"></div>
         <div id="feedback"></div>
-        <button id="next-btn" style="display:none; background-color: #27ae60; color: white;" onclick="nextQuestion()">السؤال التالي</button>
+        <button id="next-btn" style="display:none; background-color: #27ae60; color: white;" onclick="nextQuestion()">السؤال التالي ➡</button>
     </div>
 
 <script>
 const questions = [
-    { "page": 16, "q_num": 1, "question": "ما ناتج 26 ÷ 2؟", "isBook": false, "options": ["12", "13", "14", "15"], "answer": "13", "exp": "2÷2=1 و 6÷2=3." },
-    { "page": 19, "q_num": 1, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "isBook": false, "options": ["3", "30", "300", "3000"], "answer": "300", "exp": "نضع الصفرين." },
-    { "page": 31, "q_num": 1, "question": "ما ناتج 33 ÷ 2؟", "isBook": false, "options": ["15 وباقي 1", "16 وباقي 1", "16", "17"], "answer": "16 وباقي 1", "exp": "32÷2=16 والمتبقي 1." },
-    { "page": 36, "q_num": 1, "question": "ما ناتج 286 ÷ 2؟", "isBook": false, "options": ["143", "140", "153", "133"], "answer": "143", "exp": "نقسم كل رقم على 2." },
-    { "page": 46, "q_num": 1, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["أسطوانة", "مخروط", "كرة", "دائرة"], "answer": "كرة", "exp": "الكرة ليس لها أوجه." },
-    { "page": 46, "q_num": 2, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["هرم", "منشور", "مكعب", "أسطوانة"], "answer": "هرم", "exp": "له قاعدة وأوجه مثلثة." },
-    { "page": 46, "q_num": 3, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["أسطوانة", "كرة", "هرم", "مخروط"], "answer": "أسطوانة", "exp": "لها قاعدتان دائريتان." },
-    { "page": 49, "q_num": 1, "question": "عدد أوجه الكرة؟", "isBook": false, "options": ["0", "1", "2", "3"], "answer": "0", "exp": "الكرة ليس لها أوجه." },
-    { "page": 49, "q_num": 2, "question": "عدد أوجه المنشور الثلاثي؟", "isBook": false, "options": ["3", "4", "5", "6"], "answer": "5", "exp": "قاعدتان و 3 أوجه." },
-    { "page": 49, "q_num": 3, "question": "عدد رؤوس الأسطوانة؟", "isBook": false, "options": ["0", "1", "2", "4"], "answer": "0", "exp": "الأسطوانة ليس لها رؤوس." },
-    { "page": 53, "q_num": 1, "question": "اسم الشكل (4 أضلاع)؟", "isBook": false, "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "exp": "4 أضلاع = رباعي." },
-    { "page": 53, "q_num": 2, "question": "اسم الشكل (6 أضلاع)؟", "isBook": true, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "سداسي = 6 أضلاع." },
-    { "page": 53, "q_num": 3, "question": "اسم الشكل (8 أضلاع)؟", "isBook": false, "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "exp": "ثماني = 8 أضلاع." },
-    { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "isBook": true, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات على 3." },
-    { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "isBook": true, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "عقرب الدقائق على 3 = 15." },
-    { "page": 92, "q_num": 18, "question": "الساعة تشير لـ 6:45؟", "isBook": true, "options": ["6:30", "6:45", "7:45", "6:15"], "answer": "6:45", "exp": "عقرب الدقائق على 9 = 45." },
-    { "page": 99, "q_num": 1, "question": "محيط مربع ضلعه 8 سم؟", "isBook": false, "options": ["16", "24", "32", "64"], "answer": "32", "exp": "8 × 4 = 32." },
-    { "page": 104, "q_num": 1, "question": "مساحة مستطيل 6سم×1سم؟", "isBook": true, "options": ["6", "7", "12", "5"], "answer": "6", "exp": "6 × 1 = 6." },
-    { "page": 122, "q_num": 6, "question": "حجم مجسم 18 مكعب؟", "isBook": true, "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو عدد الوحدات." },
-    { "page": 122, "q_num": 7, "question": "حجم مجسم 27 مكعب؟", "isBook": true, "options": ["25", "27", "30", "24"], "answer": "27", "exp": "3×3×3 = 27." },
-    { "page": 122, "q_num": 8, "question": "تقدير حجم مجسم؟", "isBook": true, "options": ["8", "10", "12", "6"], "answer": "8", "exp": "نعد المكعبات." },
-    { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "isBook": true, "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "نضرب في 2." },
-    { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "isBook": true, "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "1/2 تعادل 2/4." },
-    { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16)؟", "isBook": true, "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "نحولهم لمقام واحد." },
-    { "page": 160, "q_num": 5, "question": "تحويل 7/10 لعشري؟", "isBook": false, "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "exp": "0.7." },
-    { "page": 160, "q_num": 6, "question": "تحويل 4/10 لعشري؟", "isBook": false, "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "exp": "0.4." },
-    { "page": 162, "q_num": 1, "question": "ناتج 5/6 - 4/6؟", "isBook": true, "options": ["1/6", "1/0", "9/6", "1/12"], "answer": "1/6", "exp": "5-4=1." },
-    { "page": 162, "q_num": 2, "question": "ناتج 6/9 - 4/9؟", "isBook": true, "options": ["1/9", "2/9", "10/9", "2/18"], "answer": "2/9", "exp": "6-4=2." },
-    { "page": 166, "q_num": 1, "question": "ناتج 3/4 - 1/4؟", "isBook": true, "options": ["2/4", "1/4", "4/4", "2/0"], "answer": "2/4", "exp": "3-1=2." },
-    { "page": 166, "q_num": 2, "question": "ناتج 5/8 - 2/8؟", "isBook": true, "options": ["1/8", "3/8", "7/8", "3/0"], "answer": "3/8", "exp": "5-2=3." },
-    { "page": 180, "q_num": 5, "question": "1/10 ككسر عشري؟", "isBook": true, "options": ["0.1", "0.01", "1.0", "0.11"], "answer": "0.1", "exp": "0.1." },
-    { "page": 180, "q_num": 6, "question": "2/10 ككسر عشري؟", "isBook": true, "options": ["0.2", "0.02", "2.0", "0.22"], "answer": "0.2", "exp": "0.2." },
-    { "page": 180, "q_num": 7, "question": "7/10 ككسر عشري؟", "isBook": true, "options": ["0.7", "0.07", "7.0", "0.77"], "answer": "0.7", "exp": "0.7." },
-    { "page": 178, "q_num": 1, "question": "الكسر (7/10)؟", "isBook": true, "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "exp": "7 من 10." },
-    { "page": 178, "q_num": 2, "question": "الكسر (4/10)؟", "isBook": true, "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "exp": "4 من 10." },
-    { "page": 178, "q_num": 3, "question": "كسر الشبكة (78/100)؟", "isBook": true, "options": ["78/100", "22/100", "50/100", "7/10"], "answer": "78/100", "exp": "78 من 100." },
-    { "page": 185, "q_num": 14, "question": "73/100 ككسر عشري؟", "isBook": true, "options": ["0.73", "0.073", "7.3", "0.37"], "answer": "0.73", "exp": "0.73." },
-    { "page": 185, "q_num": 15, "question": "0.10 ككسر اعتيادي؟", "isBook": true, "options": ["1/100", "10/100", "10/10", "1/10"], "answer": "10/100", "exp": "10 من 100." },
-    { "page": 185, "q_num": 16, "question": "في صفحة 185، انظر الرسم، إذا قرأت فاطمة 35 كتاباً من أصل 100، فما الكسر الذي يمثل الكتب غير الأدبية؟", "isBook": true, "options": ["35/100", "65/100", "100/65", "65/10"], "answer": "65/100", "exp": "100-35=65." }
+    { "page": 16, "q_num": 1, "question": "ما ناتج 26 ÷ 2؟", "isBook": false, "options": ["12", "13", "14", "15"], "answer": "13", "exp": "نقسم العشرات 2÷2=1، ثم الآحاد 6÷2=3، فالناتج 13." },
+    { "page": 19, "q_num": 1, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "isBook": false, "options": ["3", "30", "300", "3000"], "answer": "300", "exp": "نقسم 12 على 4 يعطينا 3، ثم نضع الصفرين في الناتج." },
+    { "page": 31, "q_num": 1, "question": "ما ناتج 33 ÷ 2؟", "isBook": false, "options": ["15 وباقي 1", "16 وباقي 1", "16", "17"], "answer": "16 وباقي 1", "exp": "أقرب رقم هو 32. 32÷2=16 والمتبقي 1." },
+    { "page": 36, "q_num": 1, "question": "ما ناتج 286 ÷ 2؟", "isBook": false, "options": ["143", "140", "153", "133"], "answer": "143", "exp": "نقسم كل رقم على 2: المئات (2÷2=1)، العشرات (8÷2=4)، الآحاد (6÷2=3)." },
+    { "page": 46, "q_num": 1, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["أسطوانة", "مخروط", "كرة", "دائرة"], "answer": "كرة", "exp": "هذا المجسم منحني بالكامل وليس له أوجه مستوية أو رؤوس، إذن هو كرة." },
+    { "page": 46, "q_num": 2, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["هرم", "منشور", "مكعب", "أسطوانة"], "answer": "هرم", "exp": "له قاعدة واحدة وأوجه جانبية مثلثية تلتقي في نقطة (الرأس)." },
+    { "page": 46, "q_num": 3, "question": "ما اسم هذا المجسم؟", "isBook": true, "options": ["أسطوانة", "كرة", "هرم", "مخروط"], "answer": "أسطوانة", "exp": "المجسم له قاعدتان دائريتان وجسم منحني، إذن هو أسطوانة." },
+    { "page": 49, "q_num": 1, "question": "عدد أوجه الكرة؟", "isBook": false, "options": ["0", "1", "2", "3"], "answer": "0", "exp": "الكرة ليس لها أي أسطح مستوية (أوجه)." },
+    { "page": 49, "q_num": 2, "question": "عدد أوجه المنشور الثلاثي؟", "isBook": false, "options": ["3", "4", "5", "6"], "answer": "5", "exp": "له قاعدتان مثلثتان وثلاثة أوجه مستطيلة، المجموع 5 أوجه." },
+    { "page": 49, "q_num": 3, "question": "عدد رؤوس الأسطوانة؟", "isBook": false, "options": ["0", "1", "2", "4"], "answer": "0", "exp": "الأسطوانة شكل منحني وليس لها زوايا مدببة (رؤوس)." },
+    { "page": 53, "q_num": 1, "question": "اسم الشكل (4 أضلاع)؟", "isBook": false, "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "exp": "المضلع يسمى بعدد أضلاعه، 4 أضلاع يعني شكل رباعي." },
+    { "page": 53, "q_num": 2, "question": "اسم الشكل (6 أضلاع)؟", "isBook": true, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "6 أضلاع تعني شكل سداسي." },
+    { "page": 53, "q_num": 3, "question": "اسم الشكل (8 أضلاع)؟", "isBook": false, "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "exp": "8 أضلاع تعني شكل ثماني." },
+    { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "isBook": true, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات القصير على 3، وعقرب الدقائق الطويل على 12." },
+    { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "isBook": true, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "عقرب الدقائق على الرقم 3، وكل رقم يمثل 5 دقائق (3 × 5 = 15 دقيقة)." },
+    { "page": 92, "q_num": 18, "question": "الساعة تشير لـ 6:45؟", "isBook": true, "options": ["6:30", "6:45", "7:45", "6:15"], "answer": "6:45", "exp": "عقرب الدقائق على الرقم 9، إذن (9 × 5 = 45 دقيقة)." },
+    { "page": 99, "q_num": 1, "question": "محيط مربع ضلعه 8 سم؟", "isBook": false, "options": ["16", "24", "32", "64"], "answer": "32", "exp": "محيط المربع = طول الضلع × 4. إذن (8 × 4 = 32 سم)." },
+    { "page": 104, "q_num": 1, "question": "مساحة مستطيل 6سم×1سم؟", "isBook": true, "options": ["6", "7", "12", "5"], "answer": "6", "exp": "المساحة = الطول × العرض. إذن (6 × 1 = 6 سم مربع)." },
+    { "page": 122, "q_num": 6, "question": "حجم مجسم 18 مكعب؟", "isBook": true, "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو إجمالي عدد الوحدات المكعبة التي يتكون منها المجسم." },
+    { "page": 122, "q_num": 7, "question": "حجم مجسم 27 مكعب؟", "isBook": true, "options": ["25", "27", "30", "24"], "answer": "27", "exp": "المجسم مكون من 3 طبقات كل طبقة بها 9 مكعبات، المجموع 27." },
+    { "page": 122, "q_num": 8, "question": "تقدير حجم مجسم؟", "isBook": true, "options": ["8", "10", "12", "6"], "answer": "8", "exp": "التقدير يكون بعد المكعبات الظاهرة وتوقع المكعبات المخفية خلفها." },
+    { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "isBook": true, "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "لإيجاد كسر مكافئ نضرب البسط والمقام في نفس العدد (مثلاً نضرب في 2)." },
+    { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "isBook": true, "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "إذا وحدنا المقامات، 1/2 تصبح 2/4، ومن الواضح أن 2/4 أصغر من 3/4." },
+    { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16)؟", "isBook": true, "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "1/16 هو أصغر كسر، يليه 3/4، والأكبر هو 7/8." },
+    { "page": 160, "q_num": 5, "question": "تحويل 7/10 لعشري؟", "isBook": false, "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "exp": "القسمة على 10 تعني وضع الفاصلة بعد خانة واحدة من اليمين (0.7)." },
+    { "page": 160, "q_num": 6, "question": "تحويل 4/10 لعشري؟", "isBook": false, "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "exp": "4 أجزاء من عشرة تكتب (0.4)." },
+    { "page": 162, "q_num": 1, "question": "ناتج 5/6 - 4/6؟", "isBook": true, "options": ["1/6", "1/0", "9/6", "1/12"], "answer": "1/6", "exp": "في الكسور المتشابهة، نطرح البسط فقط والمقام يبقى كما هو (5 - 4 = 1)." },
+    { "page": 162, "q_num": 2, "question": "ناتج 6/9 - 4/9؟", "isBook": true, "options": ["1/9", "2/9", "10/9", "2/18"], "answer": "2/9", "exp": "نطرح البسط: 6 - 4 = 2، والمقام 9 يبقى ثابت." },
+    { "page": 166, "q_num": 1, "question": "ناتج 3/4 - 1/4؟", "isBook": true, "options": ["2/4", "1/4", "4/4", "2/0"], "answer": "2/4", "exp": "نطرح البسط: 3 - 1 = 2، والمقام 4 يبقى ثابت." },
+    { "page": 166, "q_num": 2, "question": "ناتج 5/8 - 2/8؟", "isBook": true, "options": ["1/8", "3/8", "7/8", "3/0"], "answer": "3/8", "exp": "نطرح البسط: 5 - 2 = 3، والمقام 8 يبقى ثابت." },
+    { "page": 180, "q_num": 5, "question": "1/10 ككسر عشري؟", "isBook": true, "options": ["0.1", "0.01", "1.0", "0.11"], "answer": "0.1", "exp": "جزء واحد من عشرة يُكتب 0.1." },
+    { "page": 180, "q_num": 6, "question": "2/10 ككسر عشري؟", "isBook": true, "options": ["0.2", "0.02", "2.0", "0.22"], "answer": "0.2", "exp": "جزأين من عشرة تُكتب 0.2." },
+    { "page": 180, "q_num": 7, "question": "7/10 ككسر عشري؟", "isBook": true, "options": ["0.7", "0.07", "7.0", "0.77"], "answer": "0.7", "exp": "سبعة أجزاء من عشرة تُكتب 0.7." },
+    { "page": 178, "q_num": 1, "question": "الكسر (7/10)؟", "isBook": true, "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "exp": "عدد الأجزاء الملونة 7، والعدد الكلي 10، إذن الكسر 7/10." },
+    { "page": 178, "q_num": 2, "question": "الكسر (4/10)؟", "isBook": true, "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "exp": "عدد الأجزاء الملونة 4 من أصل 10." },
+    { "page": 178, "q_num": 3, "question": "كسر الشبكة (78/100)؟", "isBook": true, "options": ["78/100", "22/100", "50/100", "7/10"], "answer": "78/100", "exp": "شبكة المئة بها 78 مربع ملون من أصل 100." },
+    { "page": 185, "q_num": 14, "question": "73/100 ككسر عشري؟", "isBook": true, "options": ["0.73", "0.073", "7.3", "0.37"], "answer": "0.73", "exp": "القسمة على 100 تعني وضع الفاصلة بعد رقمين من اليمين (0.73)." },
+    { "page": 185, "q_num": 15, "question": "0.10 ككسر اعتيادي؟", "isBook": true, "options": ["1/100", "10/100", "10/10", "1/10"], "answer": "10/100", "exp": "0.10 تعني 10 أجزاء من المئة، وتُكتب ككسر 10/100." },
+    { "page": 185, "q_num": 16, "question": "في صفحة 185، انظر الرسم، إذا قرأت فاطمة 35 كتاباً من أصل 100، فما الكسر الذي يمثل الكتب غير الأدبية؟", "isBook": true, "options": ["35/100", "65/100", "100/65", "65/10"], "answer": "65/100", "exp": "نطرح 35 من 100 لنجد الباقي (الكتب غير الأدبية) وهو 65. إذن الكسر هو 65/100." }
 ];
 
 let currentIdx = 0, score = 0;
 function loadQ() {
     let q = questions[currentIdx];
     document.getElementById('question-text').innerText = (currentIdx + 1) + ". " + q.question;
-    document.getElementById('page-info').innerText = "صفحة " + q.page + " - سؤال " + q.q_num + " - اجتهاد شخصي";
+    document.getElementById('page-info').innerText = "صفحة " + q.page + " | سؤال " + q.q_num;
+    
     let tip = document.getElementById('book-tip');
-    if(q.isBook) { tip.style.display = "block"; tip.innerText = "انظر للكتاب صفحة " + q.page + " - سؤال " + q.q_num; } else { tip.style.display = "none"; }
-    let cont = document.getElementById('options-container'); cont.innerHTML = '';
+    if(q.isBook) { 
+        tip.style.display = "block"; 
+        tip.innerHTML = "🔍 <b>استعن بالكتاب:</b> افتح صفحة " + q.page + " وانظر لسؤال " + q.q_num; 
+    } else { 
+        tip.style.display = "none"; 
+    }
+    
+    let cont = document.getElementById('options-container'); 
+    cont.innerHTML = '';
+    document.getElementById('feedback').style.display = "none";
+    document.getElementById('next-btn').style.display = "none";
+    
     q.options.forEach(o => {
-        let btn = document.createElement('button'); btn.innerText = o;
+        let btn = document.createElement('button'); 
+        btn.className = "option-btn";
+        btn.innerText = o;
         btn.onclick = () => {
-            let f = document.getElementById('feedback'); f.style.display = "block";
-            if(o === q.answer) { score += 10; f.style.backgroundColor = "#d4edda"; f.innerText = "صح! " + q.exp; }
-            else { f.style.backgroundColor = "#f8d7da"; f.innerText = "خطأ. " + q.exp; }
+            // تعطيل جميع الأزرار بعد الاختيار
+            let allBtns = cont.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            let f = document.getElementById('feedback'); 
+            f.style.display = "block";
+            
+            if(o === q.answer) { 
+                score += 10; 
+                f.style.backgroundColor = "#d4edda"; 
+                f.style.color = "#155724"; 
+                f.style.border = "2px solid #c3e6cb";
+                f.innerHTML = "✅ <b>أحسنت يا بطل! إجابة صحيحة.</b><br><br>💡 <b>طريقة الحل:</b> " + q.exp; 
+            } else { 
+                f.style.backgroundColor = "#f8d7da"; 
+                f.style.color = "#721c24"; 
+                f.style.border = "2px solid #f5c6cb";
+                f.innerHTML = "❌ <b>للأسف، إجابة خاطئة.</b><br><br>🎯 <b>الإجابة الصحيحة هي:</b> (" + q.answer + ")<br>💡 <b>طريقة الحل:</b> " + q.exp; 
+            }
+            
             document.getElementById('points').innerText = score;
             document.getElementById('next-btn').style.display = "block";
         };
         cont.appendChild(btn);
     });
 }
+
 function nextQuestion() {
     currentIdx++;
-    if(currentIdx < questions.length) { document.getElementById('feedback').style.display = "none"; document.getElementById('next-btn').style.display = "none"; loadQ(); }
-    else { document.body.innerHTML = "<h1>انتهى التحدي! مجموع نقاطك: " + score + " من " + (questions.length * 10) + "</h1>"; }
+    if(currentIdx < questions.length) {
+        loadQ();
+    } else { 
+        document.body.innerHTML = `
+            <div class="question-box" style="margin-top:50px;">
+                <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
+                <h2 style="color:#27ae60; font-size:2em;">مجموع نقاطك: ${score} من ${questions.length * 10}</h2>
+                <p style="font-size:1.2em; color:#7f8c8d; margin-top:20px;">كفو يا بطل! استمر في الإبداع.</p>
+                <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:50%; margin-top:30px;">إعادة التحدي 🔄</button>
+            </div>
+        `; 
+    }
 }
 loadQ();
 </script>
