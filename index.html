@@ -28,6 +28,13 @@
         .intro-dedication { color: #e67e22; font-weight: bold; font-size: 1.4em; margin-bottom: 20px; }
         .intro-note { background: #fdf2e9; border-right: 5px solid #e67e22; padding: 15px; margin: 20px 0; font-weight: bold; color: #d35400; text-align: right; border-radius: 10px; }
         .intro-thanks { background: #e8f8f5; border-right: 5px solid #1abc9c; padding: 15px; margin: 20px 0; font-weight: bold; color: #16a085; text-align: right; border-radius: 10px; font-size: 1.2em;}
+        
+        /* تسجيل الدخول */
+        .player-registration { background: #fff3e0; border: 2px dashed #e67e22; padding: 20px; border-radius: 15px; margin: 20px 0; }
+        #player-name { font-size: 1.2em; padding: 10px; width: 80%; border-radius: 10px; border: 2px solid #bdc3c7; text-align: center; font-weight: bold; margin-bottom: 10px; outline: none; }
+        #player-name:focus { border-color: #2980b9; }
+        .welcome-back { color: #27ae60; font-size: 1.5em; font-weight: bold; display: none; }
+
         #start-btn { background: #e74c3c; color: white; padding: 15px 40px; font-size: 1.5em; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); transition: 0.3s; }
         #start-btn:hover { transform: scale(1.05); background: #c0392b; }
 
@@ -53,11 +60,20 @@
         #prev-btn { background-color: #7f8c8d; }
         #next-btn { background-color: #2980b9; }
 
-        /* تنسيق الكسور العمودية */
+        /* سجل الأبطال (Leaderboard) */
+        #leaderboard-screen { display: none; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.2em; }
+        .leaderboard-table th, .leaderboard-table td { padding: 15px; border-bottom: 2px solid #eee; text-align: center; }
+        .leaderboard-table th { background-color: #2980b9; color: white; }
+        .leaderboard-table tr:nth-child(2) td { font-weight: bold; font-size: 1.3em; background-color: #fff9c4; color: #d35400; } /* الأول ذهبي */
+        .leaderboard-table tr:nth-child(3) td { font-weight: bold; background-color: #f5f5f5; color: #7f8c8d; } /* الثاني فضي */
+        .leaderboard-table tr:nth-child(4) td { font-weight: bold; background-color: #fbeee6; color: #a04000; } /* الثالث برونزي */
+        .current-player { border: 3px solid #27ae60 !important; background-color: #e9f7ef !important; }
+
+        /* تنسيق الكسور */
         .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; font-size: 0.9em; line-height: 1.2; font-weight: bold; }
         .frac span { padding: 0 5px; }
         .frac .bottom { border-top: 2px solid currentColor; }
-        
         .exp-details { background: rgba(255,255,255,0.6); padding: 10px 15px; border-radius: 10px; margin-top: 10px; border-right: 4px solid; }
         .svg-container { margin: 20px 0; display: flex; justify-content: center; }
     </style>
@@ -72,9 +88,15 @@
             🌹 شكر وتقدير خاص لمعلم المادة الأستاذ الفاضل: <b>محمد عبدالواحد</b>، على جهوده وعطائه.
         </div>
 
+        <div class="player-registration" id="reg-box">
+            <h3 style="color: #d35400; margin-top: 0;">أدخل اسمك يا بطل لتسجيل دخولك:</h3>
+            <input type="text" id="player-name" placeholder="اكتب اسمك الأول أو لقبك هنا..." required>
+        </div>
+        <div class="welcome-back" id="welcome-msg"></div>
+
         <div class="intro-note">
             ⚠️ <b>ملاحظة هامة:</b><br>
-            هذا العمل هو اجتهاد شخصي يهدف إلى المساعدة في المراجعة وتثبيت المعلومات، ولكنه <b>لا يغني أبداً</b> عن مراجعة الكتاب المدرسي أو الاستغناء عن شرح وتوجيهات معلم المادة.
+            هذا العمل هو اجتهاد شخصي يهدف للمساعدة في المراجعة، ولكنه <b>لا يغني أبداً</b> عن الكتاب المدرسي أو شرح معلم المادة.
         </div>
 
         <button id="start-btn" onclick="startQuiz()">ابدأ المراجعة 🚀</button>
@@ -98,7 +120,30 @@
         </div>
     </div>
 
+    <div id="leaderboard-screen">
+        <div class="question-box" style="margin-top:20px;">
+            <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
+            <h2 style="color:#27ae60; font-size:2em;">نتيجتك: <span id="final-score-display"></span></h2>
+            <p id="unanswered-warning" style="font-size:1.2em; color:#e67e22; font-weight:bold; display:none;"></p>
+            
+            <h2 style="margin-top: 30px; color: #2980b9;">👑 سجل الأبطال 👑</h2>
+            <table class="leaderboard-table" id="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>المركز</th>
+                        <th>البطل</th>
+                        <th>النقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+
+            <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:80%; margin-top:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">إعادة التحدي وتحطيم الرقم 🔄</button>
+        </div>
+    </div>
+
 <script>
+// قائمة الأسئلة الـ 39
 const questions = [
     { "page": 16, "q_num": 1, "question": "ما ناتج 26 ÷ 2؟", "options": ["12", "13", "14", "15"], "answer": "13", "exp": "القسمة تعني التوزيع بالتساوي. لتبسيط الحل نقسم الرقم إلى أجزاء:<br>1️⃣ نقسم العشرات: 20 ÷ 2 = 10<br>2️⃣ نقسم الآحاد: 6 ÷ 2 = 3<br>3️⃣ نجمع النواتج: 10 + 3 = 13." },
     { "page": 19, "q_num": 1, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "options": ["3", "30", "300", "3000"], "answer": "300", "exp": "هذا السؤال يعتمد على (الأنماط في القسمة).<br>بما أننا نعلم أن حقيقة القسمة الأساسية هي (12 ÷ 4 = 3)، نضيف الأصفار الموجودة في الرقم (1200) إلى الناتج النهائي. <br>بما أن هناك صفرين، نضعهما لتصبح 300." },
@@ -143,6 +188,25 @@ const questions = [
 
 let currentIdx = 0;
 let userAnswers = {}; 
+let currentPlayer = "";
+
+// إعداد سجل الأبطال المبدئي
+let defaultLeaderboard = [
+    { name: "تميم (أبو سعد)", score: 390 },
+    { name: "عبقري الرياضيات", score: 350 },
+    { name: "بطل التحدي", score: 280 }
+];
+
+window.onload = () => {
+    let savedName = localStorage.getItem('mathHeroName');
+    if(savedName) {
+        currentPlayer = savedName;
+        document.getElementById('reg-box').style.display = 'none';
+        let welcome = document.getElementById('welcome-msg');
+        welcome.style.display = 'block';
+        welcome.innerText = "مرحباً بعودتك يا بطل: " + currentPlayer;
+    }
+};
 
 function formatFractions(text) {
     if (!text) return "";
@@ -150,6 +214,16 @@ function formatFractions(text) {
 }
 
 function startQuiz() {
+    if(!currentPlayer) {
+        let inputName = document.getElementById('player-name').value.trim();
+        if(inputName === "") {
+            alert("لا تنسى كتابة اسمك يا بطل قبل البداية!");
+            return;
+        }
+        currentPlayer = inputName;
+        localStorage.setItem('mathHeroName', currentPlayer);
+    }
+    
     document.getElementById('intro-screen').style.display = 'none';
     document.getElementById('quiz-screen').style.display = 'block';
     loadQ();
@@ -158,6 +232,7 @@ function startQuiz() {
 function updateScore() {
     let score = Object.values(userAnswers).filter(a => a.isCorrect).length * 10;
     document.getElementById('points').innerText = score;
+    return score;
 }
 
 function showFeedbackUI(o, q, isCorrect) {
@@ -325,21 +400,67 @@ function nextQuestion() {
         let unansweredCount = questions.length - answeredCount;
         
         if (unansweredCount > 0) {
-            let confirmFinish = confirm("تنبيه يا بطل! 🛑\nيوجد " + unansweredCount + " أسئلة لم تقم بحلها بعد.\nهل أنت متأكد أنك تريد إنهاء التحدي؟");
+            let confirmFinish = confirm("تنبيه يا بطل! 🛑\nيوجد " + unansweredCount + " أسئلة لم تقم بحلها بعد.\nهل أنت متأكد أنك تريد إنهاء التحدي والانتقال لسجل الأبطال؟");
             if (!confirmFinish) return;
         }
-
-        let finalScore = Object.values(userAnswers).filter(a => a.isCorrect).length * 10;
-        document.getElementById('quiz-screen').innerHTML = `
-            <div class="question-box" style="margin-top:20px;">
-                <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
-                <h2 style="color:#27ae60; font-size:2em;">مجموع نقاطك: ${finalScore} من ${questions.length * 10}</h2>
-                ${unansweredCount > 0 ? `<p style="font-size:1.2em; color:#e67e22; font-weight:bold;">عدد الأسئلة المتروكة: ${unansweredCount}</p>` : ''}
-                <p style="font-size:1.2em; color:#7f8c8d; margin-top:20px;">كفو يا بطل! عباقرة الرياضيات دائماً في القمة.</p>
-                <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:50%; margin-top:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">إعادة التحدي 🔄</button>
-            </div>
-        `; 
+        
+        finishQuiz(unansweredCount);
     }
+}
+
+function finishQuiz(unansweredCount) {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('leaderboard-screen').style.display = 'block';
+    
+    let finalScore = updateScore();
+    document.getElementById('final-score-display').innerText = finalScore + " / " + (questions.length * 10);
+    
+    if (unansweredCount > 0) {
+        let warn = document.getElementById('unanswered-warning');
+        warn.style.display = 'block';
+        warn.innerText = "لقد تركت " + unansweredCount + " أسئلة بدون إجابة!";
+    }
+
+    // إدارة سجل الأبطال في Local Storage
+    let savedLeaderboard = JSON.parse(localStorage.getItem('mathLeaderboard'));
+    if (!savedLeaderboard) {
+        savedLeaderboard = [...defaultLeaderboard];
+    }
+
+    // تحديث درجة اللاعب الحالي (إذا كانت أعلى) أو إضافته
+    let existingPlayer = savedLeaderboard.find(p => p.name === currentPlayer);
+    if (existingPlayer) {
+        if (finalScore > existingPlayer.score) {
+            existingPlayer.score = finalScore;
+        }
+    } else {
+        savedLeaderboard.push({ name: currentPlayer, score: finalScore });
+    }
+
+    // ترتيب السجل تنازلياً
+    savedLeaderboard.sort((a, b) => b.score - a.score);
+    localStorage.setItem('mathLeaderboard', JSON.stringify(savedLeaderboard));
+
+    // رسم جدول سجل الأبطال
+    let tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '';
+    
+    savedLeaderboard.forEach((player, index) => {
+        let tr = document.createElement('tr');
+        if (player.name === currentPlayer) tr.className = "current-player";
+        
+        let rankBadge = (index + 1);
+        if (index === 0) rankBadge = "🥇 الأول";
+        else if (index === 1) rankBadge = "🥈 الثاني";
+        else if (index === 2) rankBadge = "🥉 الثالث";
+
+        tr.innerHTML = `
+            <td>${rankBadge}</td>
+            <td>${player.name}</td>
+            <td>${player.score}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 </script>
 </body>
