@@ -1,195 +1,44 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار الرياضيات التفاعلي الشامل - الصف الرابع</title>
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --bg: #f4f6f9;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            max-width: 700px;
-            width: 100%;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; font-size: 1.6rem; }
-        h2 { text-align: center; color: var(--secondary); font-size: 1.2rem; margin-top: 10px; margin-bottom: 30px; line-height: 1.5; }
-        .quiz-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; background: #eef2f7; padding: 10px; border-radius: 6px; }
-        .question-card { display: none; }
-        .question-card.active { display: block; }
-        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #333; line-height: 1.6; }
-        .book-ref { display: inline-block; background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; border: 1px solid #ffeeba; }
-        .options { display: flex; flex-direction: column; gap: 12px; }
-        .btn-opt {
-            background: #fff;
-            border: 2px solid #cbd5e1;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            text-align: right;
-            transition: all 0.2s;
-        }
-        .btn-opt:hover:not([disabled]) { background: #f1f5f9; border-color: var(--secondary); }
-        .btn-opt.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .btn-opt.wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
-        .feedback { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: 500; line-height: 1.6; }
-        .feedback.show { display: block; }
-        .feedback.correct-fb { background: #e8f8f5; color: #117a65; border: 1px solid #a3e4d7; }
-        .feedback.wrong-fb { background: #fdf2f2; color: #9b2c2c; border: 1px solid #f8b4b4; }
-        .nav-actions { margin-top: 25px; display: flex; justify-content: flex-end; }
-        .btn-next { background: var(--secondary); color: white; border: none; padding: 10px 25px; font-size: 1rem; border-radius: 6px; cursor: pointer; display: none; }
-        .btn-next.show { display: block; }
-        .result-screen { display: none; text-align: center; }
-        .result-screen.active { display: block; }
-        .final-score { font-size: 3rem; font-weight: bold; color: var(--success); margin: 20px 0; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>📝 اختبار الرياضيات التفاعلي الشامل</h1>
-    <h2>🎁 إهداء من زميلكم تميم (أبو سعد) إلى زملائه الأذكياء 🌟</h2>
-
-    <div id="quiz-box">
-        <div class="quiz-info">
-            <span id="q-counter">السؤال: 1 / 15</span>
-            <span id="score-counter">النقاط: 0</span>
-        </div>
-
-        <div id="questions-container"></div>
-
-        <div class="nav-actions">
-            <button id="next-btn" class="btn-next" onclick="loadNextQuestion()">السؤال التالي ⬅️</button>
-        </div>
-    </div>
-
-    <div id="result-box" class="result-screen">
-        <h2>🎉 كفو يا أبطال انتهى الاختبار 🎉</h2>
-        <p>النتيجة النهائية للمراجعة هي:</p>
-        <div class="final-score" id="final-score-text">0 / 15</div>
-        <p>ممتازين جداً، استمروا في التفوق والتميز!</p>
-        <button class="btn-opt" style="text-align:center; margin-top:20px;" onclick="location.reload()">إعادة الاختبار 🔄</button>
-    </div>
-</div>
-
-<script>
-    const quizData = [
-        // الفصل 7: القسمة
-        { q: "س1: أوجد ناتج القسمة للمسألة التالية: 26 ÷ 2", ref: "مراجعة خارجية - الفصل 7", opts: ["11", "12", "13", "14"], ans: 2, fb: "الشرح: نبدأ من منزلة العشرات: 2 ÷ 2 = 1. ثم منزلة الآحاد: 6 ÷ 2 = 3. الناتج النهائي هو 13 بدون باقٍ." },
-        { q: "س2: أوجد ناتج وباقي قسمة: 19 ÷ 5", ref: "مراجعة خارجية - الفصل 7", opts: ["الناتج 3 والباقي 4", "الناتج 4 والباقي 1", "الناتج 3 والباقي 2", "الناتج 2 والباقي 9"], ans: 0, fb: "الشرح: أقرب عدد في جدول 5 للـ 19 هو 15 (5 × 3 = 15)، ويتبقى من الـ 19 (4). إذن الناتج 3 والباقي 4." },
-        { q: "س3: أوجد ناتج القسمة للمسألة التالية: 612 ÷ 3", ref: "مراجعة خارجية - الفصل 7", opts: ["24", "204", "214", "240"], ans: 1, fb: "الشرح: نقسم من اليسار: 6 ÷ 3 = 2. ثم 1 ÷ 3 لا يجوز لأن الواحد أصغر من الثلاثة، فنضع 0 في الناتج أولاً. ثم نأخذ الرقمين معاً 12 ÷ 3 = 4. الناتج 204." },
-        
-        // الفصل 8: الأشكال الهندسية
-        { q: "س4: ما هو الشكل ثلاثي الأبعاد الذي له وجهان دائريان وليس له رؤوس أو أحرف؟", ref: "مراجعة خارجية - الفصل 8", opts: ["المخروط", "الكرة", "الأسطوانة", "المكعب"], ans: 2, fb: "الشرح: المجسم الذي يحتوي على قاعدتين دائرية متطابقتين (وجهان دائريان) بدون وجود خطوط مستقيمة (أحرف) أو زوايا حادة (رؤوس) هو الأسطوانة." },
-        { q: "س5: شكل هندسي مستوٍ (ثنائي الأبعاد) يتكون من 3 أضلاع و3 زوايا، ما هو؟", ref: "مراجعة خارجية - الفصل 8", opts: ["المربع", "المثلث", "المستطيل", "متوازي الأضلاع"], ans: 1, fb: "الشرح: المثلث هو الشكل الهندسي المغلق المستوي الذي يتميز تقنياً باحتوائه على 3 أضلاع تلتقي لتصنع 3 زوايا داخليّة." },
-        { q: "س6: أي من الأشكال التالية يمثل شكلاً له 'محور تماثل' واحد فقط؟", ref: "مراجعة خارجية - الفصل 8", opts: ["الدائرة", "المربع", "شكل قلب", "خط مستقيم"], ans: 2, fb: "الشرح: شكل القلب لا يمكن قسمته بالتساوي وبشكل متطابق تماماً إلا بخط عمودي واحد يمر في منتصفه ليتطابق الجزء الأيمن مع الأيسر." },
-        
-        // الفصل 9: القياس
-        { q: "س7: ما هي الوحدة المترية الأنسب لقياس المسافة الطويلة جداً بين مدينتين؟", ref: "مراجعة خارجية - الفصل 9", opts: ["المليمتر (ملم)", "السنتمتر (سم)", "المتر (م)", "الكيلومتر (كلم)"], ans: 3, fb: "الشرح: المسافات الطويلة جداً والبعيدة كالتي تفصل بين المدن أو الدول تقاس دائماً بوحدة الكيلومتر (كلم)." },
-        { q: "س8: الوحدة المناسبة لقياس كتلة (وزن) الأشياء الخفيفة جداً مثل مشبك ورق هي:", ref: "مراجعة خارجية - الفصل 9", opts: ["الجرام (ج)", "الكيلوجرام (كجم)", "اللتر (ل)", "المليلمتر (ملم)"], ans: 0, fb: "الشرح: وحدة الجرام مخصصة لقياس كتل الأشياء الخفيفة والصغيرة، بينما الكيلوجرام يقيس الأشياء الثقيلة." },
-        { q: "س9: كم وحدة مكعبة يتكون منها مجسم مكعب طول ضلعه 2 وحدات؟", ref: "مراجعة خارجية - الفصل 9", opts: ["4 وحدات", "6 وحدات", "8 وحدات", "12 وحدة"], ans: 2, fb: "الشرح: قانون الحجم = الطول × العرض × الارتفاع. وبما أنه مكعب فإن أبعاده متساوية: 2 × 2 × 2 = 8 وحدات مكعبة." },
-        
-        // الفصل 10: الكسور الاعتيادية
-        { q: "س10: ما هو الكسر الذي يمثل الجزء المظلل في شكل مقسم إلى 4 أجزاء متطابقة وتلوّن منها 3؟", ref: "مراجعة خارجية - الفصل 10", opts: ["1/4", "3/4", "4/3", "2/4"], ans: 1, fb: "الشرح: البسط (فوق) يمثل عدد الأجزاء المظللة وهو 3، والمقام (تحت) يمثل العدد الإجمالي لجميع أجزاء الشكل وهو 4. إذن الكسر هو 3/4." },
-        { q: "س11: أي من الكسور التالية 'يكافئ' الكسر 1/2？", ref: "مراجعة خارجية - الفصل 10", opts: ["2/4", "1/3", "3/5", "2/6"], ans: 0, fb: "الشرح: عند ضرب بسط ومقام الكسر 1/2 في العدد (2)، ينتج كسر مكافئ ومساوٍ له في القيمة تماماً وهو 2/4." },
-        { q: "س12: اكتب العدد الكسري (واحد وثلاثة أرباع) على صورة كسر غير فعلي:", ref: "مراجعة خارجية - الفصل 10", opts: ["4/7", "5/4", "7/4", "6/4"], ans: 2, fb: "الشرح: نضرب العدد الصحيح في المقام ونجمع الناتج مع البسط: (1 × 4 = 4) ثم (4 + 3 = 7) والمقام يبقى 4 ثابتاً كما هو، فيصبح الكسر 7/4." },
-        { q: "س13: أوجد ناتج الجمع التالي: 2/9 + 5/9", ref: "مراجعة خارجية - الفصل 10", opts: ["7/18", "7/9", "3/9", "10/9"], ans: 1, fb: "الشرح: في جمع الكسور المتشابهة، نجمع الأعداد الموجودة في البسط فقط (2 + 5 = 7) ويبقى المقام (9) ثابتاً كما هو بدون تغيير، الناتج 7/9." },
-        
-        // الفصل 11: الكسور العشرية
-        { q: "س14: كيف نكتب الكسر الاعتيادي 53/100 على صورة كسر عشري بالفاصلة؟", ref: "مراجعة خارجية - الفصل 11", opts: ["0.53", "5.3", "0.053", "53.0"], ans: 0, fb: "الشرح: بما أن المقام 100 يحتوي على صفرين، نضع الفاصلة بعد رقمين بدءاً من اليمين لتصبح: 53 من مئة أي 0.53." },
-        { q: "س15: ضع الإشارة الصحيحة للمقارنة بين العددين العشريين: 0.7 [...] 0.45", ref: "مراجعة خارجية - الفصل 11", opts: ["أكبر من (>)", "أصغر من (<)", "يساوي (=)"], ans: 0, fb: "الشرح: ننظر لأول رقم بعد الفاصلة مباشرة: الـ 7 أكبر من الـ 4، لأن 0.7 هي نفسها 0.70 وهي قطعاً أكبر من 45 من مئة." }
-    ];
-
-    // تعديل مرجع السؤال الأول ليتطابق مع الصورة (الكتاب الفعلي - صفحة 19 - سؤال 1)
-    quizData[0].ref = "الكتاب الفعلي: سؤال 1 - صفحة 19";
-    // تعديل نص السؤال الأول ليتناسب مع التوثيق المطلوب
-    quizData[0].q = "س1: أوجد ناتج القسمة للمسألة التالية: 26 ÷ 2";
-
-    let currentQuestionIndex = 0;
-    let score = 0;
-
-    function initQuiz() {
-        const container = document.getElementById('questions-container');
-        container.innerHTML = ''; 
-        quizData.forEach((data, index) => {
-            const card = document.createElement('div');
-            card.className = `question-card ${index === 0 ? 'active' : ''}`;
-            card.id = `q-card-${index}`;
-            
-            let optionsHtml = '';
-            data.opts.forEach((opt, oIndex) => {
-                optionsHtml += `<button class="btn-opt" onclick="checkAnswer(${index}, ${oIndex}, this)">${opt}</button>`;
-            });
-
-            card.innerHTML = `
-                <div class="book-ref">📖 ${data.ref}</div>
-                <div class="question-text">${data.q}</div>
-                <div class="options">${optionsHtml}</div>
-                <div id="fb-${index}" class="feedback"></div>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    function checkAnswer(qIndex, selectedOptIndex, btn) {
-        const currentQ = quizData[qIndex];
-        const card = document.getElementById(`q-card-${qIndex}`);
-        const buttons = card.querySelectorAll('.btn-opt');
-        const feedbackDiv = document.getElementById(`fb-${qIndex}`);
-        
-        buttons.forEach(b => b.disabled = true);
-
-        if (selectedOptIndex === currentQ.ans) {
-            btn.classList.add('correct');
-            feedbackDiv.className = "feedback show correct-fb";
-            feedbackDiv.innerHTML = "<b>إجابة صحيحة! ممتاز 🌟</b><br>" + currentQ.fb;
-            score++;
-            document.getElementById('score-counter').innerText = "النقاط: " + score;
-        } else {
-            btn.classList.add('wrong');
-            buttons[currentQ.ans].classList.add('correct');
-            feedbackDiv.className = "feedback show wrong-fb";
-            feedbackDiv.innerHTML = "<b>إجابة غير صحيحة 📝</b><br>" + currentQ.fb;
-        }
-        
-        document.getElementById('next-btn').classList.add('show');
-    }
-
-    function loadNextQuestion() {
-        document.getElementById('next-btn').classList.remove('show');
-        document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
-        
-        currentQuestionIndex++;
-        
-        if (currentQuestionIndex < quizData.length) {
-            document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
-            document.getElementById('q-counter').innerText = `السؤال: ${currentQuestionIndex + 1} / ${quizData.length}`;
-        } else {
-            document.getElementById('quiz-box').style.display = 'none';
-            document.getElementById('result-box').classList.add('active');
-            document.getElementById('final-score-text').innerText = `${score} من ${quizData.length}`;
-        }
-    }
-
-    window.onload = initQuiz;
-</script>
-
-</body>
-</html>
+{
+  "challenge_name": "تحدي الأبطال - المراجعة الشاملة لتميم",
+  "questions": [
+    { "id": 1, "page": 16, "question": "ما ناتج 26 ÷ 2؟", "options": ["12", "13", "14", "15"], "answer": "13", "explanation": "نقسم 2÷2=1 و 6÷2=3، فالناتج 13." },
+    { "id": 2, "page": 19, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "options": ["3", "30", "300", "3000"], "answer": "300", "explanation": "عند القسمة على مضاعفات 100 نضع الصفرين في الناتج." },
+    { "id": 3, "page": 31, "question": "ما ناتج 33 ÷ 2؟", "options": ["15 وباقي 1", "16 وباقي 1", "16", "17"], "answer": "16 وباقي 1", "explanation": "33 فردي، لذا يوجد باقٍ، 2×16=32 والمتبقي 1." },
+    { "id": 4, "page": 36, "question": "ما ناتج 286 ÷ 2؟", "options": ["143", "140", "153", "133"], "answer": "143", "explanation": "نقسم كل رقم على 2: 2÷2=1، 8÷2=4، 6÷2=3." },
+    { "id": 5, "page": 46, "question": "ما اسم هذا المجسم (كرة)؟", "options": ["أسطوانة", "مخروط", "كرة", "دائرة"], "answer": "كرة", "explanation": "الكرة مجسم منحني بالكامل وليس له أوجه مستوية." },
+    { "id": 6, "page": 46, "question": "ما اسم هذا المجسم (هرم)؟", "options": ["هرم", "منشور", "مكعب", "أسطوانة"], "answer": "هرم", "explanation": "له قاعدة واحدة وأوجه مثلثة تلتقي في رأس." },
+    { "id": 7, "page": 46, "question": "ما اسم هذا المجسم (أسطوانة)؟", "options": ["أسطوانة", "كرة", "هرم", "مخروط"], "answer": "أسطوانة", "explanation": "لها قاعدتان دائريتان وجسم منحني." },
+    { "id": 8, "page": 49, "question": "عدد أوجه الكرة؟", "options": ["0", "1", "2", "3"], "answer": "0", "explanation": "الكرة سطح منحني ولا تحتوي على أي أسطح مستوية (أوجه)." },
+    { "id": 9, "page": 49, "question": "عدد أوجه المنشور الثلاثي؟", "options": ["3", "4", "5", "6"], "answer": "5", "explanation": "له قاعدتان مثلثتان وثلاثة أوجه مستطيلة." },
+    { "id": 10, "page": 49, "question": "عدد رؤوس الأسطوانة؟", "options": ["0", "1", "2", "4"], "answer": "0", "explanation": "الأسطوانة ليس لها زوايا مدببة (رؤوس)." },
+    { "id": 11, "page": 53, "question": "اسم الشكل (4 أضلاع)؟", "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "explanation": "أي مضلع له 4 أضلاع يسمى شكل رباعي." },
+    { "id": 12, "page": 53, "question": "اسم الشكل (6 أضلاع)؟", "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "explanation": "كلمة سداسي مشتقة من الرقم 6." },
+    { "id": 13, "page": 53, "question": "اسم الشكل (8 أضلاع)؟", "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "explanation": "الثماني له 8 أضلاع متساوية." },
+    { "id": 14, "page": 92, "question": "الساعة تشير لـ 3:00؟", "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "explanation": "عقرب الساعات على 3 والدقائق على 12." },
+    { "id": 15, "page": 92, "question": "الساعة تشير لـ 4:40؟", "options": ["4:20", "4:40", "5:40", "4:08"], "answer": "4:40", "explanation": "عقرب الدقائق على 8 يعني 40 دقيقة." },
+    { "id": 16, "page": 92, "question": "الساعة تشير لـ 6:30؟", "options": ["6:00", "6:30", "7:00", "6:15"], "answer": "6:30", "explanation": "عقرب الدقائق على 6 يعني 30 دقيقة." },
+    { "id": 17, "page": 99, "question": "محيط مربع ضلعه 8 سم؟", "options": ["16", "24", "32", "64"], "answer": "32", "explanation": "محيط المربع = الضلع × 4. إذن 8×4=32." },
+    { "id": 18, "page": 104, "question": "مساحة مستطيل 6سم×1سم؟", "options": ["6", "7", "12", "5"], "answer": "6", "explanation": "المساحة = الطول × العرض. 6×1=6." },
+    { "id": 19, "page": 122, "question": "حجم مجسم 18 مكعب؟", "options": ["16", "18", "20", "22"], "answer": "18", "explanation": "الحجم هو عدد الوحدات المكعبة المكونة للشكل." },
+    { "id": 20, "page": 122, "question": "حجم مجسم 27 مكعب؟", "options": ["25", "27", "30", "24"], "answer": "27", "explanation": "3×3×3 = 27 وحدة مكعبة." },
+    { "id": 21, "page": 122, "question": "تقدير حجم مجسم (8 وحدات)؟", "options": ["8", "10", "12", "6"], "answer": "8", "explanation": "نعد المكعبات الظاهرة والمخفية للتقدير." },
+    { "id": 22, "page": 148, "question": "كسر مكافئ لـ 1/3؟", "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "explanation": "نضرب البسط والمقام في 2 لنحصل على كسر مكافئ." },
+    { "id": 23, "page": 152, "question": "قارن 1/2 و 3/4؟", "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "متساويان"], "answer": "1/2 < 3/4", "explanation": "1/2 تعادل 2/4، وهي أصغر من 3/4." },
+    { "id": 24, "page": 152, "question": "ترتيب (3/4, 7/8, 1/16)؟", "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "explanation": "نحولهم لمقام واحد للمقارنة بدقة." },
+    { "id": 25, "page": 160, "question": "تحويل 7/10 لعشري؟", "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "explanation": "المقام 10 يعني خانة واحدة بعد الفاصلة." },
+    { "id": 26, "page": 160, "question": "تحويل 4/10 لعشري؟", "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "explanation": "4 أجزاء من 10 تكتب 0.4." },
+    { "id": 27, "page": 162, "question": "ناتج 5/6 - 4/6؟", "options": ["1/6", "1/0", "9/6", "1/12"], "answer": "1/6", "explanation": "في الكسور المتشابهة نطرح البسط ونبقي المقام." },
+    { "id": 28, "page": 162, "question": "ناتج 6/9 - 4/9؟", "options": ["1/9", "2/9", "10/9", "2/18"], "answer": "2/9", "explanation": "6 - 4 = 2، والمقام يبقى 9." },
+    { "id": 29, "page": 166, "question": "ناتج 3/4 - 1/4؟", "options": ["2/4", "1/4", "4/4", "2/0"], "answer": "2/4", "explanation": "3 - 1 = 2، والمقام 4." },
+    { "id": 30, "page": 166, "question": "ناتج 5/8 - 2/8؟", "options": ["1/8", "3/8", "7/8", "3/0"], "answer": "3/8", "explanation": "5 - 2 = 3، والمقام 8." },
+    { "id": 31, "page": 180, "question": "1/10 ككسر عشري؟", "options": ["0.1", "0.01", "1.0", "0.11"], "answer": "0.1", "explanation": "جزء واحد من عشرة هو 0.1." },
+    { "id": 32, "page": 180, "question": "2/10 ككسر عشري؟", "options": ["0.2", "0.02", "2.0", "0.22"], "answer": "0.2", "explanation": "جزءان من عشرة هما 0.2." },
+    { "id": 33, "page": 180, "question": "7/10 ككسر عشري؟", "options": ["0.7", "0.07", "7.0", "0.77"], "answer": "0.7", "explanation": "7 أجزاء من عشرة هي 0.7." },
+    { "id": 34, "page": 178, "question": "الكسر (7/10) الملون؟", "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "explanation": "سبعة أشرطة ملونة من أصل عشرة." },
+    { "id": 35, "page": 178, "question": "الكسر (4/10) الملون؟", "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "explanation": "أربعة أشرطة ملونة من أصل عشرة." },
+    { "id": 36, "page": 178, "question": "كسر الشبكة (78/100)؟", "options": ["78/100", "22/100", "50/100", "7/10"], "answer": "78/100", "explanation": "78 مربعاً ملوناً من أصل 100." },
+    { "id": 37, "page": 185, "question": "73/100 ككسر عشري؟", "options": ["0.73", "0.073", "7.3", "0.37"], "answer": "0.73", "explanation": "المقام 100 يعني خانتين بعد الفاصلة." },
+    { "id": 38, "page": 185, "question": "0.10 ككسر اعتيادي؟", "options": ["1/100", "10/100", "10/10", "1/10"], "answer": "10/100", "explanation": "0.10 تعني 10 أجزاء من المئة." },
+    { "id": 39, "page": 185, "question": "الكتب غير الأدبية (من 100)؟", "options": ["35/100", "65/100", "100/65", "65/10"], "answer": "65/100", "explanation": "الكل 100 - الأدبية 35 = 65 كتاباً غير أدبي." }
+  ]
+}
