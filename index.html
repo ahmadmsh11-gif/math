@@ -113,14 +113,14 @@ const questions = [
     { "page": 53, "q_num": 1, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="10,20 80,10 90,80 20,90" fill="#9b59b6" stroke="#8e44ad" stroke-width="3"/></svg>`, "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "exp": "المُضلع يأخذ اسمه من عدد الأضلاع. بما أن هذا الشكل يحتوي على 4 أضلاع، فهو يسمى (شكل رباعي)." },
     { "page": 53, "q_num": 2, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="#2ecc71" stroke="#27ae60" stroke-width="3"/></svg>`, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "بعدّ أضلاع الشكل الخارجي نجدها 6 أضلاع، واسمه مشتق من الرقم ستة (شكل سداسي)." },
     { "page": 53, "q_num": 3, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill="#e74c3c" stroke="#c0392b" stroke-width="3"/></svg>`, "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "exp": "المُضلع الذي يحتوي على 8 أضلاع يسمى (شكل ثماني)." },
-    { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "isBook": true, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات القصير يشير لعدد الساعات (3). عقرب الدقائق الطويل يشير لـ (12) وهذا يعني تماماً. إذن 3:00." },
-    { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "isBook": true, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "كل رقم في الدقائق يمثل 5 دقائق. عقرب الدقائق يقف على (3)، نضرب (3 × 5 = 15 دقيقة). إذن الساعة 4:15." },
-    { "page": 92, "q_num": 18, "question": "الساعة تشير لـ 6:45؟", "isBook": true, "options": ["6:30", "6:45", "7:45", "6:15"], "answer": "6:45", "exp": "عقرب الدقائق يقف على الرقم 9. نضرب (9 × 5 = 45 دقيقة). والساعات تجاوزت 6. إذن الساعة 6:45." },
+    { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "drawClock": { "hDeg": 90, "mDeg": 0 }, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات القصير يشير لعدد الساعات (3). عقرب الدقائق الطويل يشير لـ (12) وهذا يعني تماماً. إذن 3:00." },
+    { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "drawClock": { "hDeg": 127.5, "mDeg": 90 }, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "كل رقم في الدقائق يمثل 5 دقائق. عقرب الدقائق يقف على (3)، نضرب (3 × 5 = 15 دقيقة). إذن الساعة 4:15." },
+    { "page": 92, "q_num": 18, "question": "الساعة تشير لـ 6:45؟", "drawClock": { "hDeg": 202.5, "mDeg": 270 }, "options": ["6:30", "6:45", "7:45", "6:15"], "answer": "6:45", "exp": "عقرب الدقائق يقف على الرقم 9. نضرب (9 × 5 = 45 دقيقة). والساعات تجاوزت 6. إذن الساعة 6:45." },
     { "page": 99, "q_num": 1, "question": "ما محيط المربع الموضح أدناه؟", "drawShape": { "type": "square", "side": "8 سم" }, "options": ["16", "24", "32", "64"], "answer": "32", "exp": "المحيط هو المسافة الخارجية. في المربع جميع الأضلاع متساوية. نضرب (طول الضلع × 4) ➔ 8 × 4 = 32 سم." },
     { "page": 104, "q_num": 1, "question": "ما مساحة المستطيل الموضح أدناه؟", "drawShape": { "type": "rectangle", "w": "6 سم", "h": "1 سم" }, "options": ["6", "7", "12", "5"], "answer": "6", "exp": "المساحة هي مقدار الفراغ بالداخل. قانون مساحة المستطيل (الطول × العرض). نضرب: 6 × 1 = 6 سم مربع." },
-    { "page": 122, "q_num": 6, "question": "حجم مجسم 18 مكعب؟", "isBook": true, "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو إجمالي عدد المكعبات الصغيرة التي يتكون منها المجسم. ذكر السؤال أنه يتكون من 18 مكعب، فالحجم هو 18." },
-    { "page": 122, "q_num": 7, "question": "حجم مجسم 27 مكعب؟", "isBook": true, "options": ["25", "27", "30", "24"], "answer": "27", "exp": "الحجم = الطول × العرض × الارتفاع. 3 × 3 × 3 = 27 وحدة مكعبة." },
-    { "page": 122, "q_num": 8, "question": "تقدير حجم مجسم؟", "isBook": true, "options": ["8", "10", "12", "6"], "answer": "10", "exp": "الطبقة السفلية: 3 صفوف × 2 = 6 مكعبات. الطبقة العلوية: 4 مكعبات مبنية فوق. المجموع 6 + 4 = 10 وحدات مكعبة." },
+    { "page": 122, "q_num": 6, "question": "ما حجم المجسم الموضح أدناه؟", "drawCubes": [[3,3,3], [3,3,3]], "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو إجمالي عدد المكعبات الصغيرة التي يتكون منها المجسم.<br>نلاحظ أن المجسم عبارة عن طبقتين (أمامية وخلفية)، وكل طبقة تحتوي على 9 مكعبات (3 أعمدة × 3 صفوف).<br>المجموع: 9 + 9 = 18 وحدة مكعبة." },
+    { "page": 122, "q_num": 7, "question": "ما حجم المجسم الموضح أدناه؟", "drawCubes": [[3,3,3], [3,3,3], [3,3,3]], "options": ["25", "27", "30", "24"], "answer": "27", "exp": "الحجم = الطول × العرض × الارتفاع.<br>المجسم الظاهر يمتلك 3 مكعبات في الطول، و 3 في العرض، و 3 في الارتفاع.<br>نضرب الأبعاد الثلاثة: 3 × 3 × 3 = 27 وحدة مكعبة." },
+    { "page": 122, "q_num": 8, "question": "قدر حجم المجسم الموضح أدناه؟", "drawCubes": [[2,2,1], [2,2,1]], "options": ["8", "10", "12", "6"], "answer": "10", "exp": "نعد المكعبات في الطبقات الظاهرة والداخلية:<br>1️⃣ الطبقة السفلية بالكامل: تتكون من 3 أعمدة وصفين للداخل، أي (3 × 2 = 6 مكعبات).<br>2️⃣ الطبقة العلوية: نرى 4 مكعبات فقط مبنية فوق الجزء الأيسر والأوسط (2 × 2 = 4 مكعبات).<br>المجموع الكلي: 6 (أسفل) + 4 (أعلى) = 10 وحدات مكعبة." },
     { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "لإيجاد كسر مكافئ نضرب البسط والمقام في نفس العدد. نضرب الكسر 1/3 في 2 ليصبح 2/6." },
     { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "نوحد المقامات: نضرب 1/2 في 2 فتصبح 2/4. بمقارنة 2/4 مع 3/4 نجد أن الثلاثة أكبر، إذن النصف أصغر." },
     { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16) من الأصغر للأكبر؟", "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "نوحد المقامات للرقم 16: (3/4 يصبح 12/16)، (7/8 يصبح 14/16). نرتب البسوط: 1 ثم 12 ثم 14. إذن الترتيب هو: 1/16 ثم 3/4 ثم 7/8." },
@@ -183,8 +183,47 @@ function loadQ() {
     let q = questions[currentIdx];
     let qText = (currentIdx + 1) + ". " + formatFractions(q.question);
     
+    // رسم المكعبات 3D (أسئلة الحجم)
+    if (q.drawCubes) {
+        let svg = `<svg width="240" height="200" viewBox="0 0 240 220" style="margin:20px auto; display:block;">
+            <defs>
+                <g id="cb">
+                    <polygon points="0,0 20,-10 40,0 20,10" fill="#f39c12" stroke="#d35400" stroke-width="1" stroke-linejoin="round"/>
+                    <polygon points="0,0 20,10 20,32 0,22" fill="#d35400" stroke="#a04000" stroke-width="1" stroke-linejoin="round"/>
+                    <polygon points="20,10 40,0 40,22 20,32" fill="#e67e22" stroke="#c0392b" stroke-width="1" stroke-linejoin="round"/>
+                </g>
+            </defs>`;
+        for(let r=0; r<q.drawCubes.length; r++) {
+            for(let c=0; c<q.drawCubes[r].length; c++) {
+                let h_max = q.drawCubes[r][c];
+                for(let h=0; h<h_max; h++) {
+                    let x = 100 + c*20 - r*20;
+                    let y = 140 + c*10 + r*10 - h*22;
+                    svg += `<use href="#cb" x="${x}" y="${y}"/>`;
+                }
+            }
+        }
+        svg += `</svg>`;
+        qText += svg;
+    }
+    // رسم الساعات
+    else if (q.drawClock !== undefined) {
+        qText += `
+        <div style="margin: 20px auto; width: 150px; height: 150px;">
+            <svg width="150" height="150" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#f9f9f9" stroke="#2c3e50" stroke-width="4"/>
+                <line x1="50" y1="5" x2="50" y2="12" stroke="#333" stroke-width="2"/>
+                <line x1="95" y1="50" x2="88" y2="50" stroke="#333" stroke-width="2"/>
+                <line x1="50" y1="95" x2="50" y2="88" stroke="#333" stroke-width="2"/>
+                <line x1="5" y1="50" x2="12" y2="50" stroke="#333" stroke-width="2"/>
+                <line x1="50" y1="50" x2="50" y2="25" stroke="#c0392b" stroke-width="4" stroke-linecap="round" transform="rotate(${q.drawClock.hDeg} 50 50)"/>
+                <line x1="50" y1="50" x2="50" y2="12" stroke="#2980b9" stroke-width="3" stroke-linecap="round" transform="rotate(${q.drawClock.mDeg} 50 50)"/>
+                <circle cx="50" cy="50" r="4" fill="#2c3e50"/>
+            </svg>
+        </div>`;
+    }
     // رسم الأشكال 2D و 3D باستخدام SVG
-    if(q.drawSVG) {
+    else if(q.drawSVG) {
         qText += `<div class="svg-container">${q.drawSVG}</div>`;
     }
     // شبكة المئة
@@ -220,7 +259,7 @@ function loadQ() {
     document.getElementById('page-info').innerText = "صفحة " + q.page + " | سؤال " + q.q_num;
     
     let tip = document.getElementById('book-tip');
-    if(q.isBook && !q.drawGrid && q.draw10Grid === undefined && q.drawShape === undefined && !q.drawSVG) { 
+    if(q.isBook && !q.drawGrid && q.draw10Grid === undefined && q.drawShape === undefined && !q.drawSVG && !q.drawClock && !q.drawCubes) { 
         tip.style.display = "block"; tip.innerHTML = "🔍 <b>استعن بالكتاب:</b> افتح صفحة " + q.page + " وانظر لسؤال " + q.q_num; 
     } else { tip.style.display = "none"; }
     
