@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الرياضيات التفاعلي الشامل - الصف الرابع</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --bg: #f4f6f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+        h2 { text-align: center; color: var(--secondary); font-size: 1.1rem; margin-top: 0; margin-bottom: 30px; }
+        .quiz-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; background: #eef2f7; padding: 10px; border-radius: 6px; }
+        .question-card { display: none; }
+        .question-card.active { display: block; }
+        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .btn-opt {
+            background: #fff;
+            border: 2px solid #cbd5e1;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: right;
+            transition: all 0.2s;
+        }
+        .btn-opt:hover:not([disabled]) { background: #f1f5f9; border-color: var(--secondary); }
+        .btn-opt.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .btn-opt.wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+        .feedback { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: 500; line-height: 1.6; }
+        .feedback.show { display: block; }
+        .feedback.correct-fb { background: #e8f8f5; color: #117a65; border: 1px solid #a3e4d7; }
+        .feedback.wrong-fb { background: #fdf2f2; color: #9b2c2c; border: 1px solid #f8b4b4; }
+        .nav-actions { margin-top: 25px; display: flex; justify-content: flex-end; }
+        .btn-next { background: var(--secondary); color: white; border: none; padding: 10px 25px; font-size: 1rem; border-radius: 6px; cursor: pointer; display: none; }
+        .btn-next.show { display: block; }
+        .result-screen { display: none; text-align: center; }
+        .result-screen.active { display: block; }
+        .final-score { font-size: 3rem; font-weight: bold; color: var(--success); margin: 20px 0; }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <h1>📝 اختبار الرياضيات التفاعلي الشامل</h1>
+    <h2>البطل تميم أبو سعد وزملائه الأذكياء 🌟</h2>
+
+    <div id="quiz-box">
+        <div class="quiz-info">
+            <span id="q-counter">السؤال: 1 / 15</span>
+            <span id="score-counter">النقاط: 0</span>
+        </div>
+
+        <div id="questions-container"></div>
+
+        <div class="nav-actions">
+            <button id="next-btn" class="btn-next" onclick="loadNextQuestion()">السؤال التالي ⬅️</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="result-screen">
+        <h2>🎉 كفو يا أبطال انتهى الاختبار 🎉</h2>
+        <p>النتيجة النهائية للمراجعة هي:</p>
+        <div class="final-score" id="final-score-text">0 / 15</div>
+        <p>ممتازين جداً، استمروا في التفوق والتميز!</p>
+        <button class="btn-opt" style="text-align:center; margin-top:20px;" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        // الفصل 7: القسمة
+        { q: "س1: أوجد ناتج القسمة للمسألة التالية: 26 ÷ 2", opts: ["11", "12", "13", "14"], ans: 2, fb: "الشرح: نبدأ من منزلة العشرات: 2 ÷ 2 = 1. ثم منزلة الآحاد: 6 ÷ 2 = 3. الناتج النهائي هو 13 بدون باقٍ." },
+        { q: "س2: أوجد ناتج وباقي قسمة: 19 ÷ 5", opts: ["الناتج 3 والباقي 4", "الناتج 4 والباقي 1", "الناتج 3 والباقي 2", "الناتج 2 والباقي 9"], ans: 0, fb: "الشرح: أقرب عدد في جدول 5 للـ 19 هو 15 (5 × 3 = 15)، ويتبقى من الـ 19 (4). إذن الناتج 3 والباقي 4." },
+        { q: "س3: أوجد ناتج القسمة للمسألة التالية: 612 ÷ 3", opts: ["24", "204", "214", "240"], ans: 1, fb: "الشرح: نقسم من اليسار: 6 ÷ 3 = 2. ثم 1 ÷ 3 لا يجوز لأن الواحد أصغر من الثلاثة، فنضع 0 في الناتج أولاً. ثم نأخذ الرقمين معاً 12 ÷ 3 = 4. الناتج 204." },
+        
+        // الفصل 8: الأشكال الهندسية
+        { q: "س4: ما هو الشكل ثلاثي الأبعاد الذي له وجهان دائريان وليس له رؤوس أو أحرف؟", opts: ["المخروط", "الكرة", "الأسطوانة", "المكعب"], ans: 2, fb: "الشرح: المجسم الذي يحتوي على قاعدتين دائرية متطابقتين (وجهان دائريان) بدون وجود خطوط مستقيمة (أحرف) أو زوايا حادة (رؤوس) هو الأسطوانة." },
+        { q: "س5: شكل هندسي مستوٍ (ثنائي الأبعاد) يتكون من 3 أضلاع و3 زوايا، ما هو؟", opts: ["المربع", "المثلث", "المستطيل", "متوازي الأضلاع"], ans: 1, fb: "الشرح: المثلث هو الشكل الهندسي المغلق المستوي الذي يتميز تقنياً باحتوائه على 3 أضلاع تلتقي لتصنع 3 زوايا داخليّة." },
+        { q: "س6: أي من الأشكال التالية يمثل شكلاً له 'محور تماثل' واحد فقط؟", opts: ["الدائرة", "المربع", "شكل قلب", "خط مستقيم"], ans: 2, fb: "الشرح: شكل القلب لا يمكن قسمته بالتساوي وبشكل متطابق تماماً إلا بخط عمودي واحد يمر في منتصفه ليتطابق الجزء الأيمن مع الأيسر." },
+        
+        // الفصل 9: القياس
+        { q: "س7: ما هي الوحدة المترية الأنسب لقياس المسافة الطويلة جداً بين مدينتين؟", opts: ["المليمتر (ملم)", "السنتمتر (سم)", "المتر (م)", "الكيلومتر (كلم)"], ans: 3, fb: "الشرح: المسافات الطويلة جداً والبعيدة كالتي تفصل بين المدن أو الدول تقاس دائماً بوحدة الكيلومتر (كلم)." },
+        { q: "س8: الوحدة المناسبة لقياس كتلة (وزن) الأشياء الخفيفة جداً مثل مشبك ورق هي:", opts: ["الجرام (ج)", "الكيلوجرام (كجم)", "اللتر (ل)", "المليلمتر (ملم)"], ans: 0, fb: "الشرح: وحدة الجرام مخصصة لقياس كتل الأشياء الخفيفة والصغيرة، بينما الكيلوجرام يقيس الأشياء الثقيلة." },
+        { q: "س9: كم وحدة مكعبة يتكون منها مجسم مكعب طول ضلعه 2 وحدات؟", opts: ["4 وحدات", "6 وحدات", "8 وحدات", "12 وحدة"], ans: 2, fb: "الشرح: قانون الحجم = الطول × العرض × الارتفاع. وبما أنه مكعب فإن أبعاده متساوية: 2 × 2 × 2 = 8 وحدات مكعبة." },
+        
+        // الفصل 10: الكسور الاعتيادية
+        { q: "س10: ما هو الكسر الذي يمثل الجزء المظلل في شكل مقسم إلى 4 أجزاء متطابقة وتلوّن منها 3؟", opts: ["1/4", "3/4", "4/3", "2/4"], ans: 1, fb: "الشرح: البسط (فوق) يمثل عدد الأجزاء المظللة وهو 3، والمقام (تحت) يمثل العدد الإجمالي لجميع أجزاء الشكل وهو 4. إذن الكسر هو 3/4." },
+        { q: "س11: أي من الكسور التالية 'يكافئ' الكسر 1/2؟", opts: ["2/4", "1/3", "3/5", "2/6"], ans: 0, fb: "الشرح: عند ضرب بسط ومقام الكسر 1/2 في العدد (2)، ينتج كسر مكافئ ومساوٍ له في القيمة تماماً وهو 2/4." },
+        { q: "س12: اكتب العدد الكسري (واحد وثلاثة أرباع) على صورة كسر غير فعلي:", opts: ["4/7", "5/4", "7/4", "6/4"], ans: 2, fb: "الشرح: نضرب العدد الصحيح في المقام ونجمع الناتج مع البسط: (1 × 4 = 4) ثم (4 + 3 = 7) والمقام يبقى 4 ثابتاً كما هو، فيصبح الكسر 7/4." },
+        { q: "س13: أوجد ناتج الجمع التالي: 2/9 + 5/9", opts: ["7/18", "7/9", "3/9", "10/9"], ans: 1, fb: "الشرح: في جمع الكسور المتشابهة، نجمع الأعداد الموجودة في البسط فقط (2 + 5 = 7) ويبقى المقام (9) ثابتاً كما هو بدون تغيير، الناتج 7/9." },
+        
+        // الفصل 11: الكسور العشرية
+        { q: "س14: كيف نكتب الكسر الاعتيادي 53/100 على صورة كسر عشري بالفاصلة؟", opts: ["0.53", "5.3", "0.053", "53.0"], ans: 0, fb: "الشرح: بما أن المقام 100 يحتوي على صفرين، نضع الفاصلة بعد رقمين بدءاً من اليمين لتصبح: 53 من مئة أي 0.53." },
+        { q: "س15: ضع الإشارة الصحيحة للمقارنة بين العددين العشريين: 0.7 [...] 0.45", opts: ["أكبر من (>)", "أصغر من (<)", "يساوي (=)"], ans: 0, fb: "الشرح: ننظر لأول رقم بعد الفاصلة مباشرة: الـ 7 أكبر من الـ 4، لأن 0.7 هي نفسها 0.70 وهي قطعاً أكبر من 45 من مئة." }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function initQuiz() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = ''; // تنظيف المحتوى القديم
+        quizData.forEach((data, index) => {
+            const card = document.createElement('div');
+            card.className = `question-card ${index === 0 ? 'active' : ''}`;
+            card.id = `q-card-${index}`;
+            
+            let optionsHtml = '';
+            data.opts.forEach((opt, oIndex) => {
+                optionsHtml += `<button class="btn-opt" onclick="checkAnswer(${index}, ${oIndex}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <div class="question-text">${data.q}</div>
+                <div class="options">${optionsHtml}</div>
+                <div id="fb-${index}" class="feedback"></div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function checkAnswer(qIndex, selectedOptIndex, btn) {
+        const currentQ = quizData[qIndex];
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const buttons = card.querySelectorAll('.btn-opt');
+        const feedbackDiv = document.getElementById(`fb-${qIndex}`);
+        
+        buttons.forEach(b => b.disabled = true);
+
+        if (selectedOptIndex === currentQ.ans) {
+            btn.classList.add('correct');
+            feedbackDiv.className = "feedback show correct-fb";
+            feedbackDiv.innerHTML = "<b>إجابة صحيحة! ممتاز 🌟</b><br>" + currentQ.fb;
+            score++;
+            document.getElementById('score-counter').innerText = "النقاط: " + score;
+        } else {
+            btn.classList.add('wrong');
+            buttons[currentQ.ans].classList.add('correct');
+            feedbackDiv.className = "feedback show wrong-fb";
+            feedbackDiv.innerHTML = "<b>إجابة غير صحيحة 📝</b><br>" + currentQ.fb;
+        }
+        
+        document.getElementById('next-btn').classList.add('show');
+    }
+
+    function loadNextQuestion() {
+        document.getElementById('next-btn').classList.remove('show');
+        document.getElementById(`q-card-${currentQuestionIndex}`).classList.remove('active');
+        
+        currentQuestionIndex++;
+        
+        if (currentQuestionIndex < quizData.length) {
+            document.getElementById(`q-card-${currentQuestionIndex}`).classList.add('active');
+            document.getElementById('q-counter').innerText = `السؤال: ${currentQuestionIndex + 1} / ${quizData.length}`;
+        } else {
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('result-box').classList.add('active');
+            document.getElementById('final-score-text').innerText = `${score} من ${quizData.length}`;
+        }
+    }
+
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>
