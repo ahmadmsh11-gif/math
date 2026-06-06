@@ -60,15 +60,18 @@
         #prev-btn { background-color: #7f8c8d; }
         #next-btn { background-color: #2980b9; }
 
-        /* سجل الأبطال (Leaderboard) */
+        /* سجل الأبطال لـ 25 مركز */
         #leaderboard-screen { display: none; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.2em; }
-        .leaderboard-table th, .leaderboard-table td { padding: 15px; border-bottom: 2px solid #eee; text-align: center; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.1em; }
+        .leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 2px solid #eee; text-align: center; }
         .leaderboard-table th { background-color: #2980b9; color: white; }
-        .leaderboard-table tr:nth-child(2) td { font-weight: bold; font-size: 1.3em; background-color: #fff9c4; color: #d35400; } /* الأول ذهبي */
-        .leaderboard-table tr:nth-child(3) td { font-weight: bold; background-color: #f5f5f5; color: #7f8c8d; } /* الثاني فضي */
-        .leaderboard-table tr:nth-child(4) td { font-weight: bold; background-color: #fbeee6; color: #a04000; } /* الثالث برونزي */
+        .leaderboard-table tr:nth-child(2) td { font-weight: bold; font-size: 1.2em; background-color: #fff9c4; color: #d35400; } 
+        .leaderboard-table tr:nth-child(3) td { font-weight: bold; background-color: #f5f5f5; color: #7f8c8d; } 
+        .leaderboard-table tr:nth-child(4) td { font-weight: bold; background-color: #fbeee6; color: #a04000; } 
         .current-player { border: 3px solid #27ae60 !important; background-color: #e9f7ef !important; }
+
+        /* تنسيق العداد */
+        .visitor-counter-box { margin-top: 25px; border-top: 1px solid #ddd; padding-top: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; color: #7f8c8d; }
 
         /* تنسيق الكسور */
         .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; font-size: 0.9em; line-height: 1.2; font-weight: bold; }
@@ -96,10 +99,15 @@
 
         <div class="intro-note">
             ⚠️ <b>ملاحظة هامة:</b><br>
-            هذا العمل هو اجتهاد شخصي يهدف للمساعدة في المراجعة، ولكنه <b>لا يغني أبداً</b> عن الكتاب المدرسي أو شرح معلم المادة.
+            هذا العمل هو اجتهاد شخصي يهدف للمساعدة في المراجعة، ولكنه <b>لا يغني أبداً</b> عن مراجعة الكتاب المدرسي أو شرح معلم المادة.
         </div>
 
         <button id="start-btn" onclick="startQuiz()">ابدأ المراجعة 🚀</button>
+
+        <div class="visitor-counter-box">
+            <span>📊 إحصائيات التحدي:</span>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fahmadmsh11-gif.github.io%2Fmath&count_bg=%2327AE60&title_bg=%232C3E50&title=%D8%A5%D9%8C%D8%AC%D9%85%D8%A7%D9%84%D9%8A+%D8%A7%D9%84%D8%B2%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA&edge_flat=false" alt="عداد الزوار"/>
+        </div>
     </div>
 
     <div id="quiz-screen">
@@ -121,29 +129,35 @@
     </div>
 
     <div id="leaderboard-screen">
-        <div class="question-box" style="margin-top:20px;">
+        <div class="question-box" style="margin-top:20px; max-width:700px;">
             <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
             <h2 style="color:#27ae60; font-size:2em;">نتيجتك: <span id="final-score-display"></span></h2>
             <p id="unanswered-warning" style="font-size:1.2em; color:#e67e22; font-weight:bold; display:none;"></p>
             
-            <h2 style="margin-top: 30px; color: #2980b9;">👑 سجل الأبطال 👑</h2>
-            <table class="leaderboard-table" id="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>المركز</th>
-                        <th>البطل</th>
-                        <th>النقاط</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body"></tbody>
-            </table>
+            <h2 style="margin-top: 30px; color: #2980b9;">👑 لوحة الـ 25 بطلاً المتصدرين 👑</h2>
+            <div style="overflow-x:auto;">
+                <table class="leaderboard-table" id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>المركز</th>
+                            <th>البطل</th>
+                            <th>النقاط</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+            </div>
 
             <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:80%; margin-top:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">إعادة التحدي وتحطيم الرقم 🔄</button>
+            
+            <div class="visitor-counter-box" style="margin-top:30px;">
+                <span>📊 إجمالي الزيارات المسجلة:</span>
+                <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fahmadmsh11-gif.github.io%2Fmath&count_bg=%2327AE60&title_bg=%232C3E50&title=%D8%A5%D9%8C%D8%AC%D9%85%D8%A7%D9%84%D9%8A+%D8%A7%D9%84%D8%B2%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA&edge_flat=false" alt="عداد الزوار"/>
+            </div>
         </div>
     </div>
 
 <script>
-// قائمة الأسئلة الـ 39
 const questions = [
     { "page": 16, "q_num": 1, "question": "ما ناتج 26 ÷ 2؟", "options": ["12", "13", "14", "15"], "answer": "13", "exp": "القسمة تعني التوزيع بالتساوي. لتبسيط الحل نقسم الرقم إلى أجزاء:<br>1️⃣ نقسم العشرات: 20 ÷ 2 = 10<br>2️⃣ نقسم الآحاد: 6 ÷ 2 = 3<br>3️⃣ نجمع النواتج: 10 + 3 = 13." },
     { "page": 19, "q_num": 1, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "options": ["3", "30", "300", "3000"], "answer": "300", "exp": "هذا السؤال يعتمد على (الأنماط في القسمة).<br>بما أننا نعلم أن حقيقة القسمة الأساسية هي (12 ÷ 4 = 3)، نضيف الأصفار الموجودة في الرقم (1200) إلى الناتج النهائي. <br>بما أن هناك صفرين، نضعهما لتصبح 300." },
@@ -152,11 +166,11 @@ const questions = [
     { "page": 46, "q_num": 1, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="120" height="120"><defs><radialGradient id="grad1" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#85c1e9"/><stop offset="100%" stop-color="#2980b9"/></radialGradient></defs><circle cx="60" cy="60" r="50" fill="url(#grad1)"/></svg>`, "options": ["أسطوانة", "مخروط", "كرة", "دائرة"], "answer": "كرة", "exp": "الـ (كرة) هي المجسم الوحيد الذي يكون سطحه منحنياً بالكامل، ولا يوجد فيه أي وجه مسطح ولا يحتوي على أي أضلاع أو زوايا مدببة." },
     { "page": 46, "q_num": 2, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="120" height="120" viewBox="0 0 120 120"><polygon points="60,10 10,90 60,110" fill="#f39c12"/><polygon points="60,10 60,110 110,90" fill="#e67e22"/></svg>`, "options": ["هرم", "منشور", "مكعب", "أسطوانة"], "answer": "هرم", "exp": "الـ (هرم) له قاعدة واحدة بالأسفل وجميع أوجهه الجانبية عبارة عن (مثلثات) تلتقي جميعها في نقطة مدببة بالأعلى تسمى (الرأس)." },
     { "page": 46, "q_num": 3, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="100" height="120" viewBox="0 0 100 120"><path d="M 10 25 C 10 5, 90 5, 90 25 L 90 95 C 90 115, 10 115, 10 95 Z" fill="#3498db"/><ellipse cx="50" cy="25" rx="40" ry="12" fill="#85c1e9"/></svg>`, "options": ["أسطوانة", "كرة", "هرم", "مخروط"], "answer": "أسطوانة", "exp": "الـ (أسطوانة) لها قاعدتان دائريتان وجسم منحني، وليس لها أي رؤوس حادة." },
-    { "page": 49, "q_num": 1, "question": "كم عدد أوجه الكرة؟", "options": ["0", "1", "2", "3"], "answer": "0", "exp": "بما أن الكرة منحنية بالكامل من كل الاتجاهات ولا يوجد بها أي سطح مستوي لتستقر عليه، إذن عدد أوجهها يساوي صفر (0)." },
+    { "page": 49, "q_num": 1, "question": "كم عدد أوجه الكرة？", "options": ["0", "1", "2", "3"], "answer": "0", "exp": "بما أن الكرة منحنية بالكامل من كل الاتجاهات ولا يوجد بها أي سطح مستوي لتستقر عليه، إذن عدد أوجهها يساوي صفر (0)." },
     { "page": 49, "q_num": 2, "question": "كم عدد أوجه المنشور الثلاثي؟", "options": ["3", "4", "5", "6"], "answer": "5", "exp": "المنشور الثلاثي يتكون من قاعدتين على شكل مثلث (وجهين) وثلاثة أوجه جانبية مستطيلة. المجموع: 2 + 3 = 5 أوجه." },
     { "page": 49, "q_num": 3, "question": "كم عدد رؤوس الأسطوانة؟", "options": ["0", "1", "2", "4"], "answer": "0", "exp": "الرأس هو النقطة المدببة، وبما أن الأسطوانة تتكون من أسطح منحنية وقواعد دائرية ولا تمتلك أي زوايا مدببة، إذن عدد رؤوسها هو صفر (0)." },
     { "page": 53, "q_num": 1, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="10,20 80,10 90,80 20,90" fill="#9b59b6" stroke="#8e44ad" stroke-width="3"/></svg>`, "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "exp": "المُضلع يأخذ اسمه من عدد الأضلاع. بما أن هذا الشكل يحتوي على 4 أضلاع، فهو يسمى (شكل رباعي)." },
-    { "page": 53, "q_num": 2, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="#2ecc71" stroke="#27ae60" stroke-width="3"/></svg>`, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "بعدّ أضلاع الشكل الخارجي نجدها 6 أضلاع، واسمه مشتق من الرقم ستة (شكل سداسي)." },
+    { "page": 53, "q_num": 2, "question": "ما اسم الشكل الموضح أدناه？", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="#2ecc71" stroke="#27ae60" stroke-width="3"/></svg>`, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "بعدّ أضلاع الشكل الخارجي نجدها 6 أضلاع، واسمه مشتق من الرقم ستة (شكل سداسي)." },
     { "page": 53, "q_num": 3, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill="#e74c3c" stroke="#c0392b" stroke-width="3"/></svg>`, "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "exp": "المُضلع الذي يحتوي على 8 أضلاع يسمى (شكل ثماني)." },
     { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "drawClock": { "hDeg": 90, "mDeg": 0 }, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات القصير يشير لعدد الساعات (3). عقرب الدقائق الطويل يشير لـ (12) وهذا يعني تماماً. إذن 3:00." },
     { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "drawClock": { "hDeg": 127.5, "mDeg": 90 }, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "كل رقم في الدقائق يمثل 5 دقائق. عقرب الدقائق يقف على (3)، نضرب (3 × 5 = 15 دقيقة). إذن الساعة 4:15." },
@@ -170,7 +184,7 @@ const questions = [
     { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "نوحد المقامات: نضرب 1/2 في 2 فتصبح 2/4. بمقارنة 2/4 مع 3/4 نجد أن الثلاثة أكبر، إذن النصف أصغر." },
     { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16) من الأصغر للأكبر؟", "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "نوحد المقامات للرقم 16: (3/4 يصبح 12/16)، (7/8 يصبح 14/16). نرتب البسوط: 1 ثم 12 ثم 14. إذن الترتيب هو: 1/16 ثم 3/4 ثم 7/8." },
     { "page": 160, "q_num": 5, "question": "تحويل 7/10 لعشري؟", "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "exp": "المقام 10 يحتوي على صفر واحد، مما يعني منزلة عشرية واحدة يمين الفاصلة. نضع الرقم 7 ليصبح 0.7." },
-    { "page": 160, "q_num": 6, "question": "تحويل 4/10 لعشري؟", "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "exp": "نفس القاعدة: الكسر مقامه 10، نضع الرقم 4 في منزلة الأعشار (أول منزلة يمين الفاصلة) لتصبح 0.4." },
+    { "page": 160, "q_num": 6, "question": "تحويل 4/10 لعشري？", "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "exp": "نفس القاعدة: الكسر مقامه 10، نضع الرقم 4 في منزلة الأعشار (أول منزلة يمين الفاصلة) لتصبح 0.4." },
     { "page": 162, "q_num": 1, "question": "ما ناتج: 5/6 - 4/6؟", "options": ["1/6", "1/0", "9/6", "1/12"], "answer": "1/6", "exp": "بما أن المقامات متساوية، ننزل المقام 6 كما هو. ونطرح البسطين: 5 ناقص 4 = 1. الناتج النهائي هو 1/6." },
     { "page": 162, "q_num": 2, "question": "ما ناتج: 6/9 - 4/9؟", "options": ["1/9", "2/9", "10/9", "2/18"], "answer": "2/9", "exp": "نترك المقام 9 ثابتاً، ونطرح الأرقام في البسط: 6 ناقص 4 = 2. الناتج هو 2/9." },
     { "page": 166, "q_num": 1, "question": "ما ناتج: 3/4 - 1/4؟", "options": ["2/4", "1/4", "4/4", "2/0"], "answer": "2/4", "exp": "المقام 4 يبقى ثابتاً، نطرح البسوط: 3 ناقص 1 = 2. الناتج هو 2/4." },
@@ -190,7 +204,7 @@ let currentIdx = 0;
 let userAnswers = {}; 
 let currentPlayer = "";
 
-// إعداد سجل الأبطال المبدئي
+// سجل الأبطال الافتراضي
 let defaultLeaderboard = [
     { name: "تميم (أبو سعد)", score: 390 },
     { name: "عبقري الرياضيات", score: 350 },
@@ -342,7 +356,6 @@ function loadQ() {
     cont.innerHTML = '';
     document.getElementById('feedback').style.display = "none";
     
-    // إعداد أزرار التنقل
     document.getElementById('prev-btn').disabled = (currentIdx === 0);
     let nextBtn = document.getElementById('next-btn');
     if (currentIdx === questions.length - 1) {
@@ -353,13 +366,11 @@ function loadQ() {
         nextBtn.style.backgroundColor = "#2980b9";
     }
 
-    // توليد الخيارات
     q.options.forEach(o => {
         let btn = document.createElement('button'); 
         btn.className = "option-btn";
         btn.innerHTML = formatFractions(o);
         
-        // التحقق إذا كان السؤال مجاب عليه مسبقاً
         if (userAnswers[currentIdx]) {
             btn.disabled = true;
             if (o === userAnswers[currentIdx].selected) {
@@ -381,7 +392,6 @@ function loadQ() {
         cont.appendChild(btn);
     });
 
-    // إظهار التغذية الراجعة مباشرة إذا كان مجاباً
     if (userAnswers[currentIdx]) {
         showFeedbackUI(userAnswers[currentIdx].selected, q, userAnswers[currentIdx].isCorrect);
     }
@@ -395,7 +405,6 @@ function nextQuestion() {
     if(currentIdx < questions.length - 1) {
         currentIdx++; loadQ();
     } else { 
-        // فحص الأسئلة المتروكة
         let answeredCount = Object.keys(userAnswers).length;
         let unansweredCount = questions.length - answeredCount;
         
@@ -421,13 +430,11 @@ function finishQuiz(unansweredCount) {
         warn.innerText = "لقد تركت " + unansweredCount + " أسئلة بدون إجابة!";
     }
 
-    // إدارة سجل الأبطال في Local Storage
     let savedLeaderboard = JSON.parse(localStorage.getItem('mathLeaderboard'));
     if (!savedLeaderboard) {
         savedLeaderboard = [...defaultLeaderboard];
     }
 
-    // تحديث درجة اللاعب الحالي (إذا كانت أعلى) أو إضافته
     let existingPlayer = savedLeaderboard.find(p => p.name === currentPlayer);
     if (existingPlayer) {
         if (finalScore > existingPlayer.score) {
@@ -437,11 +444,11 @@ function finishQuiz(unansweredCount) {
         savedLeaderboard.push({ name: currentPlayer, score: finalScore });
     }
 
-    // ترتيب السجل تنازلياً
+    // ترتيب تنازلي وقص اللوحة عند أفضل 25 طالب فقط
     savedLeaderboard.sort((a, b) => b.score - a.score);
+    savedLeaderboard = savedLeaderboard.slice(0, 25);
     localStorage.setItem('mathLeaderboard', JSON.stringify(savedLeaderboard));
 
-    // رسم جدول سجل الأبطال
     let tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '';
     
