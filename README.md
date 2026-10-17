@@ -1,2 +1,259 @@
-# math
-اختبار مراجعة الرياضيات تفاعلي
+إليك الكود المحدث بالكامل ليضم 20 سؤالاً متنوعاً، وضعنا فيها مزيجاً بين الألغاز، المعلومات العامة، وبعض الأسئلة التي تلامس اهتماماتكم (مثل التراث الحجازي، تمر بيشة، غنم العرضيات، الزراعة في عسير، والكوميديا).
+انسخ الكود بالكامل وافتحه بنفس الطريقة السابقة:
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة عائلة الشمراني التفاعلية</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 800px;
+            flex-wrap: wrap;
+        }
+        .team {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 15px;
+            flex: 1;
+            min-width: 120px;
+            backdrop-filter: blur(5px);
+        }
+        .team h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .quiz-container {
+            background: white;
+            color: #333;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .question {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c5364;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .option {
+            background: #f1f2f6;
+            border: 2px solid #dfe4ea;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .option:hover {
+            background: #dfe4ea;
+            transform: translateY(-2px);
+        }
+        .option.correct {
+            background: #2ecc71;
+            color: white;
+            border-color: #27ae60;
+        }
+        .option.wrong {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+        .controls {
+            margin-top: 25px;
+            display: none;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #2c5364;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #203a43;
+        }
+        .btn-award {
+            background: #f39c12;
+        }
+        .btn-award:hover {
+            background: #e67e22;
+        }
+        .progress {
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 تحدي عائلة الشمراني التفاعلي 🏆</h1>
+
+    <div class="scoreboard">
+        <div class="team">
+            <h2> فريق أبوي   🦅</h2>
+            <div class="score" id="score-0">0</div>
+        </div>
+        <div class="team">
+            <h2> فريق أمي  ☕</h2>
+            <div class="score" id="score-1">0</div>
+        </div>
+        <div class="team">
+            <h2> فريق ام عمار ⚡<br><small>(، ، )</small></h2>
+            <div class="score" id="score-2">0</div>
+        </div>
+    </div>
+
+    <div class="quiz-container">
+        <div class="progress" id="q-progress">السؤال 1 من 20</div>
+        <div class="question" id="question-text">جاري تحميل السؤال...</div>
+        <div class="options" id="options-container"></div>
+
+        <div class="controls" id="controls">
+            <h3 style="width: 100%; margin-bottom: 10px; color: #333;">لمن تذهب الـ 10 نقاط؟</h3>
+            <button class="btn btn-award" onclick="awardPoints(0)">أبو ياسر</button>
+            <button class="btn btn-award" onclick="awardPoints(1)">أم ياسر (سارا)</button>
+            <button class="btn btn-award" onclick="awardPoints(2)">الأبطال</button>
+            <button class="btn" style="width: 100%; margin-top: 15px;" onclick="nextQuestion()">السؤال التالي ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "أكلة شعبية لذيذة جداً، تُعجن من الدقيق البُر الأبيض والأسمر وتُقدم مع السمن، ما هي؟", options: ["الجريش", "العريكة", "المرقوق"], ans: 1 },
+            { q: "ما هي المحافظة السعودية المشهورة بإنتاج «تمر الصفري الملكي»؟", options: ["الأحساء", "القصيم", "بيشة"], ans: 2 },
+            { q: "في لعبة الدومينو، إذا تم إغلاق اللعب (قفل)، كيف يتم تحديد الفائز؟", options: ["تعادل للجميع", "من يملك أوراقاً بمجموع نقاط أقل", "صاحب أكبر عدد من النقاط"], ans: 1 },
+            { q: "نجم كوميدي مصري قدير، من رواد الكوميديا الحديثة وله أفلام كلاسيكية محبوبة للجميع، من هو؟", options: ["عادل إمام", "محمد هنيدي", "أحمد حلمي"], ans: 1 },
+            { q: "طراز معماري أصيل يتميز بالرواشين الخشبية والنوافذ الجميلة، ما هو؟", options: ["الطراز الحجازي", "الطراز النجدي", "الطراز الجنوبي"], ans: 0 },
+            { q: "حيوان بحري ذكي جداً يمتلك 3 قلوب، و 8 أذرع، ودمه أزرق، ما هو؟", options: ["الحوت الأزرق", "الدولفين", "الأخطبوط"], ans: 2 },
+            { q: "سلالة من الأغنام مشهورة في منطقة «العرضيات» وتتميز بجودة لحمها وملاءمتها للتربية؟", options: ["النعيمي", "الحري", "النجدي"], ans: 1 },
+            { q: "ما هو الشيء الذي يمشي ويقف وليس له أرجل؟", options: ["الساعة", "القلم", "الغيوم"], ans: 0 },
+            { q: "لماذا نرى ضوء «البرق» في السماء قبل أن نسمع صوت «الرعد» بثوانٍ؟", options: ["لأن سرعة الضوء أكبر من سرعة الصوت", "لأن البرق يحدث أولاً", "لأن الغيوم تحبس الصوت لفترة"], ans: 0 },
+            { q: "مرتفعات سعودية تتميز ببرودة جوها وتصلح لزراعة «الفراولة» في البيوت المحمية؟", options: ["مرتفعات عسير", "مرتفعات تبوك", "مرتفعات حائل"], ans: 0 },
+            { q: "أكمل المثل الشعبي الشهير: «مد رجولك على قد ...»؟", options: ["فراشك", "لحافك", "بساطك"], ans: 1 },
+            { q: "ما هي أطول سورة في القرآن الكريم؟", options: ["سورة النساء", "سورة آل عمران", "سورة البقرة"], ans: 2 },
+            { q: "شيء كلما أخذت منه كبر وكلما وضعت فيه صغر؟", options: ["العمر", "الحفرة", "البالون"], ans: 1 },
+            { q: "أي طائر ينام غالباً واقفاً على رجل واحدة للحفاظ على حرارة جسمه؟", options: ["النعامة", "طائر النورس", "طائر الفلامنجو (النحام)"], ans: 2 },
+            { q: "بيت لا فيه أبواب ولا نوافذ، وإذا انكسر ما يتصلح أبداً، ما هو؟", options: ["البيضة", "الزجاج", "الخيمة"], ans: 0 },
+            { q: "كم عدد السجدات التلاوية في القرآن الكريم؟", options: ["11 سجدة", "15 سجدة", "14 سجدة"], ans: 1 },
+            { q: "أضخم حيوان يعيش على كوكب الأرض حالياً؟", options: ["الفيل الأفريقي", "الحوت الأزرق", "القرش الأبيض"], ans: 1 },
+            { q: "إذا كان معك 50 ريال واشتريت 3 ألعاب كل لعبة بـ 10 ريال، كم يتبقى معك؟", options: ["20 ريال", "30 ريال", "10 ريال"], ans: 0 },
+            { q: "من الفنون والأهازيج الشعبية القديمة في محايل عسير ورجال ألمع؟", options: ["المزمار", "الخطوة والدمة", "السامري"], ans: 1 },
+            { q: "ما هو الكوكب الذي يُطلق عليه اسم «الكوكب الأحمر»؟", options: ["المشتري", "الزهرة", "المريخ"], ans: 2 }
+        ];
+
+        let currentQuestion = 0;
+        let scores = [0, 0, 0];
+        let answered = false;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const controls = document.getElementById('controls');
+        const progressText = document.getElementById('q-progress');
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                progressText.innerHTML = "النهاية";
+                questionText.innerHTML = "🎉 انتهت المسابقة! راجعوا النقاط في الأعلى لمعرفة بطل العائلة 🎉";
+                optionsContainer.innerHTML = "";
+                controls.style.display = "none";
+                return;
+            }
+
+            answered = false;
+            controls.style.display = "none";
+            progressText.innerHTML = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+            const q = questions[currentQuestion];
+            questionText.innerHTML = q.q;
+            optionsContainer.innerHTML = "";
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            const correctIndex = questions[currentQuestion].ans;
+            const allOptions = optionsContainer.children;
+
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                controls.style.display = "flex"; 
+            } else {
+                btnElement.classList.add('wrong');
+                allOptions[correctIndex].classList.add('correct');
+                controls.style.display = "flex";
+                const awardBtns = document.querySelectorAll('.btn-award');
+                awardBtns.forEach(btn => btn.style.display = 'none');
+            }
+        }
+
+        function awardPoints(teamIndex) {
+            scores[teamIndex] += 10;
+            document.getElementById(`score-${teamIndex}`).innerText = scores[teamIndex];
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            const awardBtns = document.querySelectorAll('.btn-award');
+            awardBtns.forEach(btn => btn.style.display = 'block'); 
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
+
