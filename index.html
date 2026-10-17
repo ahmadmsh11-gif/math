@@ -1,474 +1,258 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تحدي الأبطال - عباقرة الرياضيات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة عائلة الشمراني التفاعلية</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #74ebd5, #9face6); 
-            min-height: 100vh; 
-            color: #333; 
-            margin: 0; 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
-        /* تنسيقات الشاشة الافتتاحية */
-        #intro-screen {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            margin: 50px auto;
-            max-width: 650px;
-            line-height: 1.8;
+        h1 {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
-        #intro-screen h1 { color: #2980b9; font-size: 2.8em; margin-bottom: 10px; text-shadow: none; }
-        .intro-dedication { color: #e67e22; font-weight: bold; font-size: 1.4em; margin-bottom: 20px; }
-        .intro-note { background: #fdf2e9; border-right: 5px solid #e67e22; padding: 15px; margin: 20px 0; font-weight: bold; color: #d35400; text-align: right; border-radius: 10px; }
-        .intro-thanks { background: #e8f8f5; border-right: 5px solid #1abc9c; padding: 15px; margin: 20px 0; font-weight: bold; color: #16a085; text-align: right; border-radius: 10px; font-size: 1.2em;}
-        
-        /* تسجيل الدخول */
-        .player-registration { background: #fff3e0; border: 2px dashed #e67e22; padding: 20px; border-radius: 15px; margin: 20px 0; }
-        #player-name { font-size: 1.2em; padding: 10px; width: 80%; border-radius: 10px; border: 2px solid #bdc3c7; text-align: center; font-weight: bold; margin-bottom: 10px; outline: none; }
-        #player-name:focus { border-color: #2980b9; }
-        .welcome-back { color: #27ae60; font-size: 1.5em; font-weight: bold; display: none; }
-
-        #start-btn { background: #e74c3c; color: white; padding: 15px 40px; font-size: 1.5em; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); transition: 0.3s; }
-        #start-btn:hover { transform: scale(1.05); background: #c0392b; }
-
-        /* تنسيقات شاشة الاختبار */
-        #quiz-screen { display: none; }
-        .score-board { font-size: 1.8em; font-weight: bold; color: #fff; background: rgba(0,0,0,0.3); padding: 15px 30px; border-radius: 50px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .question-box { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin: 0 auto; max-width: 650px; }
-        h1.quiz-title { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 2.5em; margin-top: 0; }
-        
-        button.option-btn { display: block; margin: 12px auto; padding: 15px; width: 90%; border-radius: 15px; border: 2px solid #ecf0f1; background: #fdfdfd; color: #2c3e50; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button.option-btn:hover:not(:disabled) { background: #e0f7fa; border-color: #00bcd4; transform: scale(1.02); }
-        button.option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
-        
-        #feedback { font-size: 1.1em; line-height: 1.8; padding: 20px; margin-top: 20px; border-radius: 15px; display: none; text-align: right; }
-        .book-tip { color: #d35400; font-weight: bold; border: 2px dashed #e67e22; padding: 15px; margin: 15px 0; background: #fdf2e9; border-radius: 10px; }
-        
-        /* تنسيق أزرار التنقل */
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
-        .nav-btn { font-size: 1.1em; font-weight: bold; padding: 15px; border-radius: 15px; border: none; cursor: pointer; transition: 0.3s; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: white; }
-        .nav-btn:hover:not(:disabled) { transform: translateY(-3px); }
-        .nav-btn:disabled { background-color: #bdc3c7; cursor: not-allowed; transform: none; box-shadow: none; }
-        
-        #prev-btn { background-color: #7f8c8d; }
-        #next-btn { background-color: #2980b9; }
-
-        /* سجل الأبطال لـ 25 مركز */
-        #leaderboard-screen { display: none; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.1em; }
-        .leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 2px solid #eee; text-align: center; }
-        .leaderboard-table th { background-color: #2980b9; color: white; }
-        .leaderboard-table tr:nth-child(2) td { font-weight: bold; font-size: 1.2em; background-color: #fff9c4; color: #d35400; } 
-        .leaderboard-table tr:nth-child(3) td { font-weight: bold; background-color: #f5f5f5; color: #7f8c8d; } 
-        .leaderboard-table tr:nth-child(4) td { font-weight: bold; background-color: #fbeee6; color: #a04000; } 
-        .current-player { border: 3px solid #27ae60 !important; background-color: #e9f7ef !important; }
-
-        /* تنسيق العداد */
-        .visitor-counter-box { margin-top: 25px; border-top: 1px solid #ddd; padding-top: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; color: #7f8c8d; }
-
-        /* تنسيق الكسور */
-        .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; font-size: 0.9em; line-height: 1.2; font-weight: bold; }
-        .frac span { padding: 0 5px; }
-        .frac .bottom { border-top: 2px solid currentColor; }
-        .exp-details { background: rgba(255,255,255,0.6); padding: 10px 15px; border-radius: 10px; margin-top: 10px; border-right: 4px solid; }
-        .svg-container { margin: 20px 0; display: flex; justify-content: center; }
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 800px;
+            flex-wrap: wrap;
+        }
+        .team {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 15px;
+            flex: 1;
+            min-width: 120px;
+            backdrop-filter: blur(5px);
+        }
+        .team h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .quiz-container {
+            background: white;
+            color: #333;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .question {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c5364;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .option {
+            background: #f1f2f6;
+            border: 2px solid #dfe4ea;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .option:hover {
+            background: #dfe4ea;
+            transform: translateY(-2px);
+        }
+        .option.correct {
+            background: #2ecc71;
+            color: white;
+            border-color: #27ae60;
+        }
+        .option.wrong {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+        .controls {
+            margin-top: 25px;
+            display: none;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #2c5364;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #203a43;
+        }
+        .btn-award {
+            background: #f39c12;
+        }
+        .btn-award:hover {
+            background: #e67e22;
+        }
+        .progress {
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <h1>تحدي الأبطال 🏆</h1>
-        <p class="intro-dedication">✨ إهداء من زميلكم تميم (أبو سعد) إلى زملائه عباقرة الرياضيات ✨</p>
-        
-        <div class="intro-thanks">
-            🌹 شكر وتقدير خاص لمعلم المادة الأستاذ الفاضل: <b>محمد عبدالواحد</b>، على جهوده وعطائه.
+    <h1>🏆 تحدي عائلة الشمراني التفاعلي 🏆</h1>
+
+    <div class="scoreboard">
+        <div class="team">
+            <h2>فريق أبو ياسر 🦅</h2>
+            <div class="score" id="score-0">0</div>
         </div>
-
-        <div class="player-registration" id="reg-box">
-            <h3 style="color: #d35400; margin-top: 0;">أدخل اسمك يا بطل لتسجيل دخولك:</h3>
-            <input type="text" id="player-name" placeholder="اكتب اسمك الأول أو لقبك هنا..." required>
+        <div class="team">
+            <h2>فريق أم ياسر ☕</h2>
+            <div class="score" id="score-1">0</div>
         </div>
-        <div class="welcome-back" id="welcome-msg"></div>
-
-        <div class="intro-note">
-            ⚠️ <b>ملاحظة هامة:</b><br>
-            هذا العمل هو اجتهاد شخصي يهدف للمساعدة في المراجعة، ولكنه <b>لا يغني أبداً</b> عن مراجعة الكتاب المدرسي أو شرح معلم المادة.
-        </div>
-
-        <button id="start-btn" onclick="startQuiz()">ابدأ المراجعة 🚀</button>
-
-        <div class="visitor-counter-box">
-            <span>📊 إجمالي الزيارات المسجلة:</span>
-            <img src="https://api.visitorbadge.io/api/visitors?path=ahmadmsh11-math-quiz&label=VISITORS&countColor=%2327ae60" alt="عداد الزوار"/>
+        <div class="team">
+            <h2>فريق الأبطال ⚡<br><small>(ياسر، تميم، عمار)</small></h2>
+            <div class="score" id="score-2">0</div>
         </div>
     </div>
 
-    <div id="quiz-screen">
-        <h1 class="quiz-title">تحدي الأبطال 🏆</h1>
-        <div class="score-board">النقاط: <span id="points" style="color: #f1c40f;">0</span></div>
+    <div class="quiz-container">
+        <div class="progress" id="q-progress">السؤال 1 من 20</div>
+        <div class="question" id="question-text">جاري تحميل السؤال...</div>
+        <div class="options" id="options-container"></div>
 
-        <div class="question-box">
-            <h2 id="question-text" style="color: #2c3e50; line-height: 1.6;">السؤال</h2>
-            <p id="page-info" style="font-weight:bold; color:#7f8c8d; font-size: 0.9em;"></p>
-            <div id="book-tip" class="book-tip" style="display:none;"></div>
-            <div id="options-container"></div>
-            <div id="feedback"></div>
-            
-            <div class="nav-buttons">
-                <button id="prev-btn" class="nav-btn" onclick="prevQuestion()">⬅ السابق</button>
-                <button id="next-btn" class="nav-btn" onclick="nextQuestion()">التالي ➡</button>
-            </div>
+        <div class="controls" id="controls">
+            <h3 style="width: 100%; margin-bottom: 10px; color: #333;">لمن تذهب الـ 10 نقاط؟</h3>
+            <button class="btn btn-award" onclick="awardPoints(0)">أبو ياسر</button>
+            <button class="btn btn-award" onclick="awardPoints(1)">أم ياسر (سارا)</button>
+            <button class="btn btn-award" onclick="awardPoints(2)">الأبطال</button>
+            <button class="btn" style="width: 100%; margin-top: 15px;" onclick="nextQuestion()">السؤال التالي ➡️</button>
         </div>
     </div>
 
-    <div id="leaderboard-screen">
-        <div class="question-box" style="margin-top:20px; max-width:700px;">
-            <h1 style="color:#2c3e50; font-size:3em; text-shadow:none;">🎉 انتهى التحدي! 🎉</h1>
-            <h2 style="color:#27ae60; font-size:2em;">نتيجتك: <span id="final-score-display"></span></h2>
-            <p id="unanswered-warning" style="font-size:1.2em; color:#e67e22; font-weight:bold; display:none;"></p>
-            
-            <h2 style="margin-top: 30px; color: #2980b9;">👑 لوحة الـ 25 بطلاً المتصدرين 👑</h2>
-            <div style="overflow-x:auto;">
-                <table class="leaderboard-table" id="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>المركز</th>
-                            <th>البطل</th>
-                            <th>النقاط</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body"></tbody>
-                </table>
-            </div>
+    <script>
+        const questions = [
+            { q: "أكلة شعبية لذيذة جداً، تُعجن من الدقيق البُر الأبيض والأسمر وتُقدم مع السمن، ما هي؟", options: ["الجريش", "العريكة", "المرقوق"], ans: 1 },
+            { q: "ما هي المحافظة السعودية المشهورة بإنتاج «تمر الصفري الملكي»؟", options: ["الأحساء", "القصيم", "بيشة"], ans: 2 },
+            { q: "في لعبة الدومينو، إذا تم إغلاق اللعب (قفل)، كيف يتم تحديد الفائز؟", options: ["تعادل للجميع", "من يملك أوراقاً بمجموع نقاط أقل", "صاحب أكبر عدد من النقاط"], ans: 1 },
+            { q: "نجم كوميدي مصري قدير، من رواد الكوميديا الحديثة وله أفلام كلاسيكية محبوبة للجميع، من هو؟", options: ["عادل إمام", "محمد هنيدي", "أحمد حلمي"], ans: 1 },
+            { q: "طراز معماري أصيل يتميز بالرواشين الخشبية والنوافذ الجميلة، ما هو؟", options: ["الطراز الحجازي", "الطراز النجدي", "الطراز الجنوبي"], ans: 0 },
+            { q: "حيوان بحري ذكي جداً يمتلك 3 قلوب، و 8 أذرع، ودمه أزرق، ما هو؟", options: ["الحوت الأزرق", "الدولفين", "الأخطبوط"], ans: 2 },
+            { q: "سلالة من الأغنام مشهورة في منطقة «العرضيات» وتتميز بجودة لحمها وملاءمتها للتربية؟", options: ["النعيمي", "الحري", "النجدي"], ans: 1 },
+            { q: "ما هو الشيء الذي يمشي ويقف وليس له أرجل؟", options: ["الساعة", "القلم", "الغيوم"], ans: 0 },
+            { q: "لماذا نرى ضوء «البرق» في السماء قبل أن نسمع صوت «الرعد» بثوانٍ؟", options: ["لأن سرعة الضوء أكبر من سرعة الصوت", "لأن البرق يحدث أولاً", "لأن الغيوم تحبس الصوت لفترة"], ans: 0 },
+            { q: "مرتفعات سعودية تتميز ببرودة جوها وتصلح لزراعة «الفراولة» في البيوت المحمية؟", options: ["مرتفعات عسير", "مرتفعات تبوك", "مرتفعات حائل"], ans: 0 },
+            { q: "أكمل المثل الشعبي الشهير: «مد رجولك على قد ...»؟", options: ["فراشك", "لحافك", "بساطك"], ans: 1 },
+            { q: "ما هي أطول سورة في القرآن الكريم؟", options: ["سورة النساء", "سورة آل عمران", "سورة البقرة"], ans: 2 },
+            { q: "شيء كلما أخذت منه كبر وكلما وضعت فيه صغر؟", options: ["العمر", "الحفرة", "البالون"], ans: 1 },
+            { q: "أي طائر ينام غالباً واقفاً على رجل واحدة للحفاظ على حرارة جسمه؟", options: ["النعامة", "طائر النورس", "طائر الفلامنجو (النحام)"], ans: 2 },
+            { q: "بيت لا فيه أبواب ولا نوافذ، وإذا انكسر ما يتصلح أبداً، ما هو؟", options: ["البيضة", "الزجاج", "الخيمة"], ans: 0 },
+            { q: "كم عدد السجدات التلاوية في القرآن الكريم؟", options: ["11 سجدة", "15 سجدة", "14 سجدة"], ans: 1 },
+            { q: "أضخم حيوان يعيش على كوكب الأرض حالياً؟", options: ["الفيل الأفريقي", "الحوت الأزرق", "القرش الأبيض"], ans: 1 },
+            { q: "إذا كان معك 50 ريال واشتريت 3 ألعاب كل لعبة بـ 10 ريال، كم يتبقى معك؟", options: ["20 ريال", "30 ريال", "10 ريال"], ans: 0 },
+            { q: "من الفنون والأهازيج الشعبية القديمة في محايل عسير ورجال ألمع؟", options: ["المزمار", "الخطوة والدمة", "السامري"], ans: 1 },
+            { q: "ما هو الكوكب الذي يُطلق عليه اسم «الكوكب الأحمر»؟", options: ["المشتري", "الزهرة", "المريخ"], ans: 2 }
+        ];
 
-            <button onclick="location.reload()" style="background:#3498db; color:white; padding:15px; border-radius:15px; border:none; font-size:1.2em; font-weight:bold; cursor:pointer; width:80%; margin-top:30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">إعادة التحدي وتحطيم الرقم 🔄</button>
-            
-            <div class="visitor-counter-box" style="margin-top:30px;">
-                <span>📊 إجمالي الزيارات المسجلة:</span>
-                <img src="https://api.visitorbadge.io/api/visitors?path=ahmadmsh11-math-quiz&label=VISITORS&countColor=%2327ae60" alt="عداد الزوار"/>
-            </div>
-        </div>
-    </div>
+        let currentQuestion = 0;
+        let scores = [0, 0, 0];
+        let answered = false;
 
-<script>
-const questions = [
-    { "page": 16, "q_num": 1, "question": "ما ناتج 26 ÷ 2؟", "options": ["12", "13", "14", "15"], "answer": "13", "exp": "القسمة تعني التوزيع بالتساوي. لتبسيط الحل نقسم الرقم إلى أجزاء:<br>1️⃣ نقسم العشرات: 20 ÷ 2 = 10<br>2️⃣ نقسم الآحاد: 6 ÷ 2 = 3<br>3️⃣ نجمع النواتج: 10 + 3 = 13." },
-    { "page": 19, "q_num": 1, "question": "إذا كان 12 ÷ 4 = 3، فإن 1200 ÷ 4 =", "options": ["3", "30", "300", "3000"], "answer": "300", "exp": "هذا السؤال يعتمد على (الأنماط في القسمة).<br>بما أننا نعلم أن حقيقة القسمة الأساسية هي (12 ÷ 4 = 3)، نضيف الأصفار الموجودة في الرقم (1200) إلى الناتج النهائي. <br>بما أن هناك صفرين، نضعهما لتصبح 300." },
-    { "page": 31, "q_num": 1, "question": "ما ناتج 33 ÷ 2؟", "options": ["15 وباقي 1", "16 وباقي 1", "16", "17"], "answer": "16 وباقي 1", "exp": "الرقم 33 عدد فردي، ولا يقبل القسمة على 2 بدون باقي.<br>1️⃣ أقرب عدد زوجي أقل من 33 هو 32.<br>2️⃣ نقسم 32 ÷ 2 = 16.<br>3️⃣ الباقي: 33 - 32 = 1.<br>إذن الناتج هو 16 والمتبقي 1." },
-    { "page": 36, "q_num": 1, "question": "ما ناتج 286 ÷ 2؟", "options": ["143", "140", "153", "133"], "answer": "143", "exp": "نستخدم طريقة (القسمة على منزلة منزلة):<br>1️⃣ المئات: 2 ÷ 2 = 1<br>2️⃣ العشرات: 8 ÷ 2 = 4<br>3️⃣ الآحاد: 6 ÷ 2 = 3<br>نضع الأرقام بجانب بعضها بالترتيب: 143." },
-    { "page": 46, "q_num": 1, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="120" height="120"><defs><radialGradient id="grad1" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#85c1e9"/><stop offset="100%" stop-color="#2980b9"/></radialGradient></defs><circle cx="60" cy="60" r="50" fill="url(#grad1)"/></svg>`, "options": ["أسطوانة", "مخروط", "كرة", "دائرة"], "answer": "كرة", "exp": "الـ (كرة) هي المجسم الوحيد الذي يكون سطحه منحنياً بالكامل، ولا يوجد فيه أي وجه مسطح ولا يحتوي على أي أضلاع أو زوايا مدببة." },
-    { "page": 46, "q_num": 2, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="120" height="120" viewBox="0 0 120 120"><polygon points="60,10 10,90 60,110" fill="#f39c12"/><polygon points="60,10 60,110 110,90" fill="#e67e22"/></svg>`, "options": ["هرم", "منشور", "مكعب", "أسطوانة"], "answer": "هرم", "exp": "الـ (هرم) له قاعدة واحدة بالأسفل وجميع أوجهه الجانبية عبارة عن (مثلثات) تلتقي جميعها في نقطة مدببة بالأعلى تسمى (الرأس)." },
-    { "page": 46, "q_num": 3, "question": "ما اسم هذا المجسم الموضح أدناه؟", "drawSVG": `<svg width="100" height="120" viewBox="0 0 100 120"><path d="M 10 25 C 10 5, 90 5, 90 25 L 90 95 C 90 115, 10 115, 10 95 Z" fill="#3498db"/><ellipse cx="50" cy="25" rx="40" ry="12" fill="#85c1e9"/></svg>`, "options": ["أسطوانة", "كرة", "هرم", "مخروط"], "answer": "أسطوانة", "exp": "الـ (أسطوانة) لها قاعدتان دائريتان وجسم منحني، وليس لها أي رؤوس حادة." },
-    { "page": 49, "q_num": 1, "question": "كم عدد أوجه الكرة？", "options": ["0", "1", "2", "3"], "answer": "0", "exp": "بما أن الكرة منحنية بالكامل من كل الاتجاهات ولا يوجد بها أي سطح مستوي لتستقر عليه، إذن عدد أوجهها يساوي صفر (0)." },
-    { "page": 49, "q_num": 2, "question": "كم عدد أوجه المنشور الثلاثي؟", "options": ["3", "4", "5", "6"], "answer": "5", "exp": "المنشور الثلاثي يتكون من قاعدتين على شكل مثلث (وجهين) وثلاثة أوجه جانبية مستطيلة. المجموع: 2 + 3 = 5 أوجه." },
-    { "page": 49, "q_num": 3, "question": "كم عدد رؤوس الأسطوانة؟", "options": ["0", "1", "2", "4"], "answer": "0", "exp": "الرأس هو النقطة المدببة، وبما أن الأسطوانة تتكون من أسطح منحنية وقواعد دائرية ولا تمتلك أي زوايا مدببة، إذن عدد رؤوسها هو صفر (0)." },
-    { "page": 53, "q_num": 1, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="10,20 80,10 90,80 20,90" fill="#9b59b6" stroke="#8e44ad" stroke-width="3"/></svg>`, "options": ["رباعي", "خماسي", "سداسي", "مثلث"], "answer": "رباعي", "exp": "المُضلع يأخذ اسمه من عدد الأضلاع. بما أن هذا الشكل يحتوي على 4 أضلاع، فهو يسمى (شكل رباعي)." },
-    { "page": 53, "q_num": 2, "question": "ما اسم الشكل الموضح أدناه？", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="#2ecc71" stroke="#27ae60" stroke-width="3"/></svg>`, "options": ["خماسي", "سداسي", "ثماني", "مربع"], "answer": "سداسي", "exp": "بعدّ أضلاع الشكل الخارجي نجدها 6 أضلاع، واسمه مشتق من الرقم ستة (شكل سداسي)." },
-    { "page": 53, "q_num": 3, "question": "ما اسم الشكل الموضح أدناه؟", "drawSVG": `<svg width="100" height="100" viewBox="0 0 100 100"><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill="#e74c3c" stroke="#c0392b" stroke-width="3"/></svg>`, "options": ["سداسي", "سباعي", "ثماني", "دائرة"], "answer": "ثماني", "exp": "المُضلع الذي يحتوي على 8 أضلاع يسمى (شكل ثماني)." },
-    { "page": 92, "q_num": 16, "question": "الساعة تشير لـ 3:00؟", "drawClock": { "hDeg": 90, "mDeg": 0 }, "options": ["3:00", "3:30", "4:00", "12:15"], "answer": "3:00", "exp": "عقرب الساعات القصير يشير لعدد الساعات (3). عقرب الدقائق الطويل يشير لـ (12) وهذا يعني تماماً. إذن 3:00." },
-    { "page": 92, "q_num": 17, "question": "الساعة تشير لـ 4:15؟", "drawClock": { "hDeg": 127.5, "mDeg": 90 }, "options": ["4:15", "4:20", "4:40", "4:08"], "answer": "4:15", "exp": "كل رقم في الدقائق يمثل 5 دقائق. عقرب الدقائق يقف على (3)، نضرب (3 × 5 = 15 دقيقة). إذن الساعة 4:15." },
-    { "page": 92, "q_num": 18, "question": "الساعة تشير لـ 6:45؟", "drawClock": { "hDeg": 202.5, "mDeg": 270 }, "options": ["6:30", "6:45", "7:45", "6:15"], "answer": "6:45", "exp": "عقرب الدقائق يقف على الرقم 9. نضرب (9 × 5 = 45 دقيقة). والساعات تجاوزت 6. إذن الساعة 6:45." },
-    { "page": 99, "q_num": 1, "question": "ما محيط المربع الموضح أدناه؟", "drawShape": { "type": "square", "side": "8 سم" }, "options": ["16", "24", "32", "64"], "answer": "32", "exp": "المحيط هو المسافة الخارجية. في المربع جميع الأضلاع متساوية. نضرب (طول الضلع × 4) ➔ 8 × 4 = 32 سم." },
-    { "page": 104, "q_num": 1, "question": "ما مساحة المستطيل الموضح أدناه؟", "drawShape": { "type": "rectangle", "w": "6 سم", "h": "1 سم" }, "options": ["6", "7", "12", "5"], "answer": "6", "exp": "المساحة هي مقدار الفراغ بالداخل. قانون مساحة المستطيل (الطول × العرض). نضرب: 6 × 1 = 6 سم مربع." },
-    { "page": 122, "q_num": 6, "question": "ما حجم المجسم الموضح أدناه؟", "drawCubes": [[3,3,3], [3,3,3]], "options": ["16", "18", "20", "22"], "answer": "18", "exp": "الحجم هو إجمالي عدد المكعبات الصغيرة التي يتكون منها المجسم.<br>نلاحظ أن المجسم عبارة عن طبقتين (أمامية وخلفية)، وكل طبقة تحتوي على 9 مكعبات (3 أعمدة × 3 صفوف).<br>المجموع: 9 + 9 = 18 وحدة مكعبة." },
-    { "page": 122, "q_num": 7, "question": "ما حجم المجسم الموضح أدناه؟", "drawCubes": [[3,3,3], [3,3,3], [3,3,3]], "options": ["25", "27", "30", "24"], "answer": "27", "exp": "الحجم = الطول × العرض × الارتفاع.<br>المجسم الظاهر يمتلك 3 مكعبات في الطول، و 3 في العرض، و 3 في الارتفاع.<br>نضرب الأبعاد الثلاثة: 3 × 3 × 3 = 27 وحدة مكعبة." },
-    { "page": 122, "q_num": 8, "question": "قدر حجم المجسم الموضح أدناه؟", "drawCubes": [[2,2,1], [2,2,1]], "options": ["8", "10", "12", "6"], "answer": "10", "exp": "نعد المكعبات في الطبقات الظاهرة والداخلية:<br>1️⃣ الطبقة السفلية بالكامل: تتكون من 3 أعمدة وصفين للداخل، أي (3 × 2 = 6 مكعبات).<br>2️⃣ الطبقة العلوية: نرى 4 مكعبات فقط مبنية فوق الجزء الأيسر والأوسط (2 × 2 = 4 مكعبات).<br>المجموع الكلي: 6 (أسفل) + 4 (أعلى) = 10 وحدات مكعبة." },
-    { "page": 148, "q_num": 7, "question": "كسر مكافئ لـ 1/3؟", "options": ["2/6", "1/6", "3/6", "2/3"], "answer": "2/6", "exp": "لإيجاد كسر مكافئ نضرب البسط والمقام في نفس العدد. نضرب الكسر 1/3 في 2 ليصبح 2/6." },
-    { "page": 152, "q_num": 3, "question": "قارن 1/2 و 3/4؟", "options": ["1/2 > 3/4", "1/2 < 3/4", "1/2 = 3/4", "لا يمكن"], "answer": "1/2 < 3/4", "exp": "نوحد المقامات: نضرب 1/2 في 2 فتصبح 2/4. بمقارنة 2/4 مع 3/4 نجد أن الثلاثة أكبر، إذن النصف أصغر." },
-    { "page": 152, "q_num": 4, "question": "ترتيب الكسور (3/4, 7/8, 1/16) من الأصغر للأكبر؟", "options": ["1/16, 3/4, 7/8", "3/4, 1/16, 7/8", "7/8, 3/4, 1/16", "لا شيء"], "answer": "1/16, 3/4, 7/8", "exp": "نوحد المقامات للرقم 16: (3/4 يصبح 12/16)، (7/8 يصبح 14/16). نرتب البسوط: 1 ثم 12 ثم 14. إذن الترتيب هو: 1/16 ثم 3/4 ثم 7/8." },
-    { "page": 160, "q_num": 5, "question": "تحويل 7/10 لعشري؟", "options": ["0.07", "0.7", "7.0", "0.77"], "answer": "0.7", "exp": "المقام 10 يحتوي على صفر واحد، مما يعني منزلة عشرية واحدة يمين الفاصلة. نضع الرقم 7 ليصبح 0.7." },
-    { "page": 160, "q_num": 6, "question": "تحويل 4/10 لعشري？", "options": ["0.4", "0.04", "4.0", "0.004"], "answer": "0.4", "exp": "نفس القاعدة: الكسر مقامه 10، نضع الرقم 4 في منزلة الأعشار (أول منزلة يمين الفاصلة) لتصبح 0.4." },
-    { "page": 162, "q_num": 1, "question": "ما ناتج: 5/6 - 4/6؟", "options": ["1/6", "1/0", "9/6", "1/12"], "answer": "1/6", "exp": "بما أن المقامات متساوية، ننزل المقام 6 كما هو. ونطرح البسطين: 5 ناقص 4 = 1. الناتج النهائي هو 1/6." },
-    { "page": 162, "q_num": 2, "question": "ما ناتج: 6/9 - 4/9؟", "options": ["1/9", "2/9", "10/9", "2/18"], "answer": "2/9", "exp": "نترك المقام 9 ثابتاً، ونطرح الأرقام في البسط: 6 ناقص 4 = 2. الناتج هو 2/9." },
-    { "page": 166, "q_num": 1, "question": "ما ناتج: 3/4 - 1/4؟", "options": ["2/4", "1/4", "4/4", "2/0"], "answer": "2/4", "exp": "المقام 4 يبقى ثابتاً، نطرح البسوط: 3 ناقص 1 = 2. الناتج هو 2/4." },
-    { "page": 166, "q_num": 2, "question": "ما ناتج: 5/8 - 2/8؟", "options": ["1/8", "3/8", "7/8", "3/0"], "answer": "3/8", "exp": "ننزل المقام 8، ونطرح البسطين 5 ناقص 2 = 3. الناتج هو 3/8." },
-    { "page": 180, "q_num": 5, "question": "1/10 ككسر عشري؟", "options": ["0.1", "0.01", "1.0", "0.11"], "answer": "0.1", "exp": "المقام 10 يعني جزء واحد من عشرة ويُكتب 0.1." },
-    { "page": 180, "q_num": 6, "question": "2/10 ككسر عشري؟", "options": ["0.2", "0.02", "2.0", "0.22"], "answer": "0.2", "exp": "جزأين من عشرة وتُكتب بوضع الرقم 2 يمين الفاصلة مباشرة: 0.2." },
-    { "page": 180, "q_num": 7, "question": "7/10 ككسر عشري؟", "options": ["0.7", "0.07", "7.0", "0.77"], "answer": "0.7", "exp": "سبعة أجزاء من عشرة وتُكتب بوضع الرقم 7 يمين الفاصلة مباشرة: 0.7." },
-    { "page": 178, "q_num": 1, "question": "ما الكسر الذي يمثل الجزء المظلل في الشكل؟", "draw10Grid": 7, "options": ["7/10", "3/10", "1/10", "7/100"], "answer": "7/10", "exp": "المقام هو عدد الأجزاء الكلية (10). البسط هو عدد الأجزاء الخضراء (7). إذن الكسر 7/10." },
-    { "page": 178, "q_num": 2, "question": "ما الكسر الذي يمثل الجزء المظلل في الشكل؟", "draw10Grid": 4, "options": ["6/10", "4/10", "5/10", "4/100"], "answer": "4/10", "exp": "العدد الكلي للأجزاء (المقام) هو 10. قمنا بتلوين 4 أجزاء فقط. إذن الكسر يُكتب 4/10." },
-    { "page": 178, "q_num": 3, "question": "ما الكسر الذي يمثل الجزء المظلل في شبكة المئة؟", "drawGrid": true, "options": ["68/100", "32/100", "78/100", "6/10"], "answer": "68/100", "exp": "المقام هو 100. نعد المربعات الخضراء لنجدها 60 (في 6 أعمدة كاملة) + 8 مربعات إضافية = 68. الكسر هو 68/100." },
-    { "page": 185, "q_num": 14, "question": "كيف يكتب الكسر 73/100 ككسر عشري؟", "options": ["0.73", "0.073", "7.3", "0.37"], "answer": "0.73", "exp": "المقام 100، إذن نحتاج (منزلتين عشريتين) يمين الفاصلة. الرقم 73 يعبئ المنزلتين ليصبح 0.73." },
-    { "page": 185, "q_num": 15, "question": "كيف نكتب 0.10 ككسر اعتيادي؟", "options": ["1/100", "10/100", "10/10", "1/10"], "answer": "10/100", "exp": "بما أن هناك خانتين يمين الفاصلة، فالمقام الأساسي هو 100. ونضع الرقم 10 في البسط لتصبح 10/100." },
-    { "page": 185, "q_num": 16, "question": "في صفحة 185، إذا قرأت فاطمة 35 كتاباً أدبياً من أصل 100 كتاب، فما الكسر الذي يمثل الكتب (غير الأدبية)؟", "isBook": true, "options": ["35/100", "65/100", "100/65", "65/10"], "answer": "65/100", "exp": "الكتب غير الأدبية = العدد الكلي (100) ناقص الكتب الأدبية (35) = 65. الكسر هو الجزء 65 على الكل 100 ➔ 65/100." }
-];
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const controls = document.getElementById('controls');
+        const progressText = document.getElementById('q-progress');
 
-let currentIdx = 0;
-let userAnswers = {}; 
-let currentPlayer = "";
-
-// سجل الأبطال الافتراضي
-let defaultLeaderboard = [
-    { name: "تميم (أبو سعد)", score: 390 },
-    { name: "عبقري الرياضيات", score: 350 },
-    { name: "بطل التحدي", score: 280 }
-];
-
-window.onload = () => {
-    let savedName = localStorage.getItem('mathHeroName');
-    if(savedName) {
-        currentPlayer = savedName;
-        document.getElementById('reg-box').style.display = 'none';
-        let welcome = document.getElementById('welcome-msg');
-        welcome.style.display = 'block';
-        welcome.innerText = "مرحباً بعودتك يا بطل: " + currentPlayer;
-    }
-};
-
-function formatFractions(text) {
-    if (!text) return "";
-    return text.replace(/(\d+)\/(\d+)/g, '<span class="frac"><span>$1</span><span class="bottom">$2</span></span>');
-}
-
-function startQuiz() {
-    if(!currentPlayer) {
-        let inputName = document.getElementById('player-name').value.trim();
-        if(inputName === "") {
-            alert("لا تنسى كتابة اسمك يا بطل قبل البداية!");
-            return;
-        }
-        currentPlayer = inputName;
-        localStorage.setItem('mathHeroName', currentPlayer);
-    }
-    
-    document.getElementById('intro-screen').style.display = 'none';
-    document.getElementById('quiz-screen').style.display = 'block';
-    loadQ();
-}
-
-function updateScore() {
-    let score = Object.values(userAnswers).filter(a => a.isCorrect).length * 10;
-    document.getElementById('points').innerText = score;
-    return score;
-}
-
-function showFeedbackUI(o, q, isCorrect) {
-    let f = document.getElementById('feedback'); 
-    f.style.display = "block";
-    let formattedAnswer = formatFractions(q.answer);
-    let formattedExp = formatFractions(q.exp);
-
-    f.style.borderLeft = isCorrect ? "8px solid #27ae60" : "8px solid #c0392b";
-
-    if(isCorrect) { 
-        f.style.backgroundColor = "#e8f8f5"; 
-        f.style.color = "#155724"; 
-        f.innerHTML = "✅ <b>أحسنت يا بطل! إجابة صحيحة.</b><div class='exp-details' style='border-color:#27ae60;'>💡 <b>الشرح بالتفصيل:</b><br>" + formattedExp + "</div>"; 
-    } else { 
-        f.style.backgroundColor = "#fdedec"; 
-        f.style.color = "#721c24"; 
-        f.innerHTML = "❌ <b>للأسف، إجابة خاطئة.</b><br>🎯 <b>الإجابة الصحيحة هي:</b> (" + formattedAnswer + ")<div class='exp-details' style='border-color:#c0392b;'>💡 <b>لماذا؟ إليك الشرح بالتفصيل:</b><br>" + formattedExp + "</div>"; 
-    }
-}
-
-function loadQ() {
-    let q = questions[currentIdx];
-    let qText = (currentIdx + 1) + ". " + formatFractions(q.question);
-    
-    // رسم المكعبات 3D (أسئلة الحجم)
-    if (q.drawCubes) {
-        let svg = `<svg width="240" height="200" viewBox="0 0 240 220" style="margin:20px auto; display:block;">
-            <defs>
-                <g id="cb">
-                    <polygon points="0,0 20,-10 40,0 20,10" fill="#f39c12" stroke="#d35400" stroke-width="1" stroke-linejoin="round"/>
-                    <polygon points="0,0 20,10 20,32 0,22" fill="#d35400" stroke="#a04000" stroke-width="1" stroke-linejoin="round"/>
-                    <polygon points="20,10 40,0 40,22 20,32" fill="#e67e22" stroke="#c0392b" stroke-width="1" stroke-linejoin="round"/>
-                </g>
-            </defs>`;
-        for(let r=0; r<q.drawCubes.length; r++) {
-            for(let c=0; c<q.drawCubes[r].length; c++) {
-                let h_max = q.drawCubes[r][c];
-                for(let h=0; h<h_max; h++) {
-                    let x = 100 + c*20 - r*20;
-                    let y = 140 + c*10 + r*10 - h*22;
-                    svg += `<use href="#cb" x="${x}" y="${y}"/>`;
-                }
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                progressText.innerHTML = "النهاية";
+                questionText.innerHTML = "🎉 انتهت المسابقة! راجعوا النقاط في الأعلى لمعرفة بطل العائلة 🎉";
+                optionsContainer.innerHTML = "";
+                controls.style.display = "none";
+                return;
             }
-        }
-        svg += `</svg>`;
-        qText += svg;
-    }
-    // رسم الساعات
-    else if (q.drawClock !== undefined) {
-        qText += `
-        <div style="margin: 20px auto; width: 150px; height: 150px;">
-            <svg width="150" height="150" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" fill="#f9f9f9" stroke="#2c3e50" stroke-width="4"/>
-                <line x1="50" y1="5" x2="50" y2="12" stroke="#333" stroke-width="2"/>
-                <line x1="95" y1="50" x2="88" y2="50" stroke="#333" stroke-width="2"/>
-                <line x1="50" y1="95" x2="50" y2="88" stroke="#333" stroke-width="2"/>
-                <line x1="5" y1="50" x2="12" y2="50" stroke="#333" stroke-width="2"/>
-                <line x1="50" y1="50" x2="50" y2="25" stroke="#c0392b" stroke-width="4" stroke-linecap="round" transform="rotate(${q.drawClock.hDeg} 50 50)"/>
-                <line x1="50" y1="50" x2="50" y2="12" stroke="#2980b9" stroke-width="3" stroke-linecap="round" transform="rotate(${q.drawClock.mDeg} 50 50)"/>
-                <circle cx="50" cy="50" r="4" fill="#2c3e50"/>
-            </svg>
-        </div>`;
-    }
-    // رسم الأشكال 2D و 3D باستخدام SVG
-    else if(q.drawSVG) {
-        qText += `<div class="svg-container">${q.drawSVG}</div>`;
-    }
-    // شبكة المئة
-    else if(q.drawGrid) {
-        let gridHTML = '<div style="display:grid; grid-template-columns:repeat(10, 1fr); width:180px; height:180px; border:2px solid #2c3e50; margin: 20px auto; direction: rtl;">';
-        for(let i=0; i<100; i++) {
-            let row = Math.floor(i/10); let col = i%10;
-            let isGreen = (row < 2 && col < 6) || (row >= 2 && col < 7);
-            let color = isGreen ? '#27ae60' : '#ffffff';
-            gridHTML += `<div style="background-color:${color}; border:1px solid #7f8c8d; box-sizing: border-box;"></div>`;
-        }
-        gridHTML += '</div>'; qText += gridHTML;
-    } 
-    // شريط الأعشار
-    else if (q.draw10Grid !== undefined) {
-        let gridHTML = '<div style="display:flex; width:280px; height:40px; border:2px solid #2c3e50; margin: 20px auto; direction: rtl;">';
-        for(let i=0; i<10; i++) {
-            let color = (i < q.draw10Grid) ? '#27ae60' : '#ffffff';
-            gridHTML += `<div style="flex:1; background-color:${color}; border:1px solid #7f8c8d; box-sizing: border-box;"></div>`;
-        }
-        gridHTML += '</div>'; qText += gridHTML;
-    } 
-    // المربع والمستطيل
-    else if (q.drawShape !== undefined) {
-        if (q.drawShape.type === 'square') {
-            qText += `<div style="margin: 40px auto; width: 120px; height: 120px; border: 3px solid #2980b9; background-color: #eaf2f8; position: relative;"><div style="position: absolute; top: -30px; width: 100%; text-align: center; font-weight: bold; color: #2980b9; font-size: 1.1em;">${q.drawShape.side}</div><div style="position: absolute; right: -55px; top: 45px; font-weight: bold; color: #2980b9; font-size: 1.1em;">${q.drawShape.side}</div></div>`;
-        } else if (q.drawShape.type === 'rectangle') {
-            qText += `<div style="margin: 40px auto; width: 220px; height: 60px; border: 3px solid #27ae60; background-color: #e9f7ef; position: relative;"><div style="position: absolute; top: -30px; width: 100%; text-align: center; font-weight: bold; color: #27ae60; font-size: 1.1em;">${q.drawShape.w}</div><div style="position: absolute; right: -55px; top: 15px; font-weight: bold; color: #27ae60; font-size: 1.1em;">${q.drawShape.h}</div></div>`;
-        }
-    }
 
-    document.getElementById('question-text').innerHTML = qText;
-    document.getElementById('page-info').innerText = "صفحة " + q.page + " | سؤال " + q.q_num;
-    
-    let tip = document.getElementById('book-tip');
-    if(q.isBook && !q.drawGrid && q.draw10Grid === undefined && q.drawShape === undefined && !q.drawSVG && !q.drawClock && !q.drawCubes) { 
-        tip.style.display = "block"; tip.innerHTML = "🔍 <b>استعن بالكتاب:</b> افتح صفحة " + q.page + " وانظر لسؤال " + q.q_num; 
-    } else { tip.style.display = "none"; }
-    
-    let cont = document.getElementById('options-container'); 
-    cont.innerHTML = '';
-    document.getElementById('feedback').style.display = "none";
-    
-    document.getElementById('prev-btn').disabled = (currentIdx === 0);
-    let nextBtn = document.getElementById('next-btn');
-    if (currentIdx === questions.length - 1) {
-        nextBtn.innerHTML = "إنهاء التحدي 🏁";
-        nextBtn.style.backgroundColor = "#e74c3c";
-    } else {
-        nextBtn.innerHTML = "التالي ➡";
-        nextBtn.style.backgroundColor = "#2980b9";
-    }
+            answered = false;
+            controls.style.display = "none";
+            progressText.innerHTML = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+            const q = questions[currentQuestion];
+            questionText.innerHTML = q.q;
+            optionsContainer.innerHTML = "";
 
-    q.options.forEach(o => {
-        let btn = document.createElement('button'); 
-        btn.className = "option-btn";
-        btn.innerHTML = formatFractions(o);
-        
-        if (userAnswers[currentIdx]) {
-            btn.disabled = true;
-            if (o === userAnswers[currentIdx].selected) {
-                btn.style.border = userAnswers[currentIdx].isCorrect ? "3px solid #27ae60" : "3px solid #e74c3c";
-                btn.style.backgroundColor = userAnswers[currentIdx].isCorrect ? "#e9f7ef" : "#fdedec";
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            const correctIndex = questions[currentQuestion].ans;
+            const allOptions = optionsContainer.children;
+
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                controls.style.display = "flex"; 
+            } else {
+                btnElement.classList.add('wrong');
+                allOptions[correctIndex].classList.add('correct');
+                controls.style.display = "flex";
+                const awardBtns = document.querySelectorAll('.btn-award');
+                awardBtns.forEach(btn => btn.style.display = 'none');
             }
         }
 
-        btn.onclick = () => {
-            let allBtns = cont.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.disabled = true);
-
-            let isCorrect = (o === q.answer);
-            userAnswers[currentIdx] = { selected: o, isCorrect: isCorrect };
-            
-            updateScore();
-            showFeedbackUI(o, q, isCorrect);
-        };
-        cont.appendChild(btn);
-    });
-
-    if (userAnswers[currentIdx]) {
-        showFeedbackUI(userAnswers[currentIdx].selected, q, userAnswers[currentIdx].isCorrect);
-    }
-}
-
-function prevQuestion() {
-    if (currentIdx > 0) { currentIdx--; loadQ(); }
-}
-
-function nextQuestion() {
-    if(currentIdx < questions.length - 1) {
-        currentIdx++; loadQ();
-    } else { 
-        let answeredCount = Object.keys(userAnswers).length;
-        let unansweredCount = questions.length - answeredCount;
-        
-        if (unansweredCount > 0) {
-            let confirmFinish = confirm("تنبيه يا بطل! 🛑\nيوجد " + unansweredCount + " أسئلة لم تقم بحلها بعد.\nهل أنت متأكد أنك تريد إنهاء التحدي والانتقال لسجل الأبطال؟");
-            if (!confirmFinish) return;
+        function awardPoints(teamIndex) {
+            scores[teamIndex] += 10;
+            document.getElementById(`score-${teamIndex}`).innerText = scores[teamIndex];
+            nextQuestion();
         }
-        
-        finishQuiz(unansweredCount);
-    }
-}
 
-function finishQuiz(unansweredCount) {
-    document.getElementById('quiz-screen').style.display = 'none';
-    document.getElementById('leaderboard-screen').style.display = 'block';
-    
-    let finalScore = updateScore();
-    document.getElementById('final-score-display').innerText = finalScore + " / " + (questions.length * 10);
-    
-    if (unansweredCount > 0) {
-        let warn = document.getElementById('unanswered-warning');
-        warn.style.display = 'block';
-        warn.innerText = "لقد تركت " + unansweredCount + " أسئلة بدون إجابة!";
-    }
-
-    let savedLeaderboard = JSON.parse(localStorage.getItem('mathLeaderboard'));
-    if (!savedLeaderboard) {
-        savedLeaderboard = [...defaultLeaderboard];
-    }
-
-    let existingPlayer = savedLeaderboard.find(p => p.name === currentPlayer);
-    if (existingPlayer) {
-        if (finalScore > existingPlayer.score) {
-            existingPlayer.score = finalScore;
+        function nextQuestion() {
+            currentQuestion++;
+            const awardBtns = document.querySelectorAll('.btn-award');
+            awardBtns.forEach(btn => btn.style.display = 'block'); 
+            loadQuestion();
         }
-    } else {
-        savedLeaderboard.push({ name: currentPlayer, score: finalScore });
-    }
 
-    // ترتيب تنازلي وقص اللوحة عند أفضل 25 طالب فقط
-    savedLeaderboard.sort((a, b) => b.score - a.score);
-    savedLeaderboard = savedLeaderboard.slice(0, 25);
-    localStorage.setItem('mathLeaderboard', JSON.stringify(savedLeaderboard));
-
-    let tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = '';
-    
-    savedLeaderboard.forEach((player, index) => {
-        let tr = document.createElement('tr');
-        if (player.name === currentPlayer) tr.className = "current-player";
-        
-        let rankBadge = (index + 1);
-        if (index === 0) rankBadge = "🥇 الأول";
-        else if (index === 1) rankBadge = "🥈 الثاني";
-        else if (index === 2) rankBadge = "🥉 الثالث";
-
-        tr.innerHTML = `
-            <td>${rankBadge}</td>
-            <td>${player.name}</td>
-            <td>${player.score}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-</script>
+        loadQuestion();
+    </script>
 </body>
 </html>
+
