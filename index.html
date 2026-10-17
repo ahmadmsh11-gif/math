@@ -1,4 +1,6 @@
-
+تمام! عدلت لك الكود بناءً على رغبتك. الآن أصبحت أزرار النقاط (+ و -) موجودة بشكل دائم ومستقل في الأعلى بجانب اسم كل فريق.
+بمجرد أن يجاوب الفريق، تضغط أنت على زر (+) الأخضر لزيادة 10 نقاط، أو (-) الأحمر لخصم 10 نقاط في أي وقت وبدون أن تنتظر اللعبة.
+انسخ هذا الكود الجديد والصقه في الموقع:
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -22,6 +24,7 @@
             color: #ffd700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             margin-bottom: 20px;
+            font-size: 1.8rem;
         }
         .scoreboard {
             display: flex;
@@ -38,19 +41,44 @@
             border-radius: 15px;
             padding: 15px;
             flex: 1;
-            min-width: 120px;
+            min-width: 150px;
             backdrop-filter: blur(5px);
         }
         .team h2 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             font-size: 1.2rem;
             color: #fff;
+        }
+        .score-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         .score {
             font-size: 2.5rem;
             font-weight: bold;
             color: #4CAF50;
+            min-width: 50px;
         }
+        .btn-score {
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-plus { background: #2ecc71; }
+        .btn-minus { background: #e74c3c; }
+        .btn-score:active { transform: scale(0.9); }
+        
         .quiz-container {
             background: white;
             color: #333;
@@ -81,45 +109,31 @@
             transition: all 0.3s ease;
             font-weight: bold;
         }
-        .option:hover {
-            background: #dfe4ea;
-            transform: translateY(-2px);
-        }
         .option.correct {
-            background: #2ecc71;
+            background: #2ecc71 !important;
             color: white;
             border-color: #27ae60;
         }
         .option.wrong {
-            background: #e74c3c;
+            background: #e74c3c !important;
             color: white;
             border-color: #c0392b;
         }
         .controls {
             margin-top: 25px;
             display: none;
-            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
         }
         .btn {
             background: #2c5364;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-        }
-        .btn:hover {
-            background: #203a43;
-        }
-        .btn-award {
-            background: #f39c12;
-        }
-        .btn-award:hover {
-            background: #e67e22;
+            width: 100%;
         }
         .progress {
             font-size: 1rem;
@@ -134,16 +148,28 @@
 
     <div class="scoreboard">
         <div class="team">
-            <h2> فريق أبوي   🦅</h2>
-            <div class="score" id="score-0">0</div>
+            <h2>فريق أبو ياسر 🦅</h2>
+            <div class="score-control">
+                <button class="btn-score btn-plus" onclick="changeScore(0, 10)">+</button>
+                <div class="score" id="score-0">0</div>
+                <button class="btn-score btn-minus" onclick="changeScore(0, -10)">-</button>
+            </div>
         </div>
         <div class="team">
-            <h2> فريق أم ياسر  ☕</h2>
-            <div class="score" id="score-1">0</div>
+            <h2>فريق أم ياسر ☕</h2>
+            <div class="score-control">
+                <button class="btn-score btn-plus" onclick="changeScore(1, 10)">+</button>
+                <div class="score" id="score-1">0</div>
+                <button class="btn-score btn-minus" onclick="changeScore(1, -10)">-</button>
+            </div>
         </div>
         <div class="team">
-            <h2>فريق الأبطال ⚡<br><small>(مجمج، ابو سعد ، ابو عمار)</small></h2>
-            <div class="score" id="score-2">0</div>
+            <h2>فريق الأبطال ⚡</h2>
+            <div class="score-control">
+                <button class="btn-score btn-plus" onclick="changeScore(2, 10)">+</button>
+                <div class="score" id="score-2">0</div>
+                <button class="btn-score btn-minus" onclick="changeScore(2, -10)">-</button>
+            </div>
         </div>
     </div>
 
@@ -153,11 +179,7 @@
         <div class="options" id="options-container"></div>
 
         <div class="controls" id="controls">
-            <h3 style="width: 100%; margin-bottom: 10px; color: #333;">لمن تذهب الـ 10 نقاط؟</h3>
-            <button class="btn btn-award" onclick="awardPoints(0)">أبو ياسر</button>
-            <button class="btn btn-award" onclick="awardPoints(1)">أم ياسر (سارا)</button>
-            <button class="btn btn-award" onclick="awardPoints(2)">الأبطال</button>
-            <button class="btn" style="width: 100%; margin-top: 15px;" onclick="nextQuestion()">السؤال التالي ➡️</button>
+            <button class="btn" onclick="nextQuestion()">السؤال التالي ➡️</button>
         </div>
     </div>
 
@@ -194,6 +216,13 @@
         const controls = document.getElementById('controls');
         const progressText = document.getElementById('q-progress');
 
+        function changeScore(teamIndex, amount) {
+            scores[teamIndex] += amount;
+            // منع النقاط من النزول تحت الصفر
+            if(scores[teamIndex] < 0) scores[teamIndex] = 0;
+            document.getElementById(`score-${teamIndex}`).innerText = scores[teamIndex];
+        }
+
         function loadQuestion() {
             if (currentQuestion >= questions.length) {
                 progressText.innerHTML = "النهاية";
@@ -228,26 +257,17 @@
 
             if (selectedIndex === correctIndex) {
                 btnElement.classList.add('correct');
-                controls.style.display = "flex"; 
             } else {
                 btnElement.classList.add('wrong');
                 allOptions[correctIndex].classList.add('correct');
-                controls.style.display = "flex";
-                const awardBtns = document.querySelectorAll('.btn-award');
-                awardBtns.forEach(btn => btn.style.display = 'none');
             }
-        }
-
-        function awardPoints(teamIndex) {
-            scores[teamIndex] += 10;
-            document.getElementById(`score-${teamIndex}`).innerText = scores[teamIndex];
-            nextQuestion();
+            
+            // إظهار زر السؤال التالي في كل الحالات
+            controls.style.display = "flex";
         }
 
         function nextQuestion() {
             currentQuestion++;
-            const awardBtns = document.querySelectorAll('.btn-award');
-            awardBtns.forEach(btn => btn.style.display = 'block'); 
             loadQuestion();
         }
 
