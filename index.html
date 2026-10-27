@@ -1,278 +1,155 @@
-تمام! عدلت لك الكود بناءً على رغبتك. الآن أصبحت أزرار النقاط (+ و -) موجودة بشكل دائم ومستقل في الأعلى بجانب اسم كل فريق.
-بمجرد أن يجاوب الفريق، تضغط أنت على زر (+) الأخضر لزيادة 10 نقاط، أو (-) الأحمر لخصم 10 نقاط في أي وقت وبدون أن تنتظر اللعبة.
-انسخ هذا الكود الجديد والصقه في الموقع:
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسابقة عائلة الشمراني التفاعلية</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        .scoreboard {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            width: 100%;
-            max-width: 800px;
-            flex-wrap: wrap;
-        }
-        .team {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #ffd700;
-            border-radius: 15px;
-            padding: 15px;
-            flex: 1;
-            min-width: 150px;
-            backdrop-filter: blur(5px);
-        }
-        .team h2 {
-            margin: 0 0 15px 0;
-            font-size: 1.2rem;
-            color: #fff;
-        }
-        .score-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        .score {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #4CAF50;
-            min-width: 50px;
-        }
-        .btn-score {
-            width: 40px;
-            height: 40px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-        .btn-plus { background: #2ecc71; }
-        .btn-minus { background: #e74c3c; }
-        .btn-score:active { transform: scale(0.9); }
-        
-        .quiz-container {
-            background: white;
-            color: #333;
-            border-radius: 20px;
-            padding: 30px;
-            width: 100%;
-            max-width: 800px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .question {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c5364;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .option {
-            background: #f1f2f6;
-            border: 2px solid #dfe4ea;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        .option.correct {
-            background: #2ecc71 !important;
-            color: white;
-            border-color: #27ae60;
-        }
-        .option.wrong {
-            background: #e74c3c !important;
-            color: white;
-            border-color: #c0392b;
-        }
-        .controls {
-            margin-top: 25px;
-            display: none;
-            justify-content: center;
-        }
-        .btn {
-            background: #2c5364;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-        }
-        .progress {
-            font-size: 1rem;
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>شعار قناة QuizToon</title>
+<style>
+  body {
+    background-color: #121212;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  canvas {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(0, 195, 255, 0.5);
+    margin-bottom: 25px;
+    border: 4px solid #fff;
+  }
+  .btn {
+    background: linear-gradient(45deg, #00c853, #64dd17);
+    color: #fff;
+    border: none;
+    padding: 15px 35px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+    transition: transform 0.2s;
+  }
+  .btn:hover {
+    transform: scale(1.05);
+  }
+</style>
 </head>
 <body>
 
-    <h1>🏆 تحدي عائلة الشمراني التفاعلي 🏆</h1>
+  <h2>شعار قناة QuizToon الجاهز لليوتيوب</h2>
+  <!-- لوحة الرسم بدقة 800x800 المخصصة ليوتيوب -->
+  <canvas id="logoCanvas" width="800" height="800"></canvas>
+  <button class="btn" onclick="downloadLogo()">⬇️ تحميل الشعار كصورة (PNG)</button>
 
-    <div class="scoreboard">
-        <div class="team">
-            <h2>فريق أبوي 🦅</h2>
-            <div class="score-control">
-                <button class="btn-score btn-plus" onclick="changeScore(0, 10)">+</button>
-                <div class="score" id="score-0">0</div>
-                <button class="btn-score btn-minus" onclick="changeScore(0, -10)">-</button>
-            </div>
-        </div>
-        <div class="team">
-            <h2>فريق أم ياسر ☕</h2>
-            <div class="score-control">
-                <button class="btn-score btn-plus" onclick="changeScore(1, 10)">+</button>
-                <div class="score" id="score-1">0</div>
-                <button class="btn-score btn-minus" onclick="changeScore(1, -10)">-</button>
-            </div>
-        </div>
-        <div class="team">
-            <h2>فريق مجمج وابو سعد ⚡</h2>
-            <div class="score-control">
-                <button class="btn-score btn-plus" onclick="changeScore(2, 10)">+</button>
-                <div class="score" id="score-2">0</div>
-                <button class="btn-score btn-minus" onclick="changeScore(2, -10)">-</button>
-            </div>
-        </div>
-    </div>
+<script>
+const canvas = document.getElementById('logoCanvas');
+const ctx = canvas.getContext('2d');
 
-    <div class="quiz-container">
-        <div class="progress" id="q-progress">السؤال 1 من 20</div>
-        <div class="question" id="question-text">جاري تحميل السؤال...</div>
-        <div class="options" id="options-container"></div>
+// 1. رسم الخلفية المتدرجة (أزرق ملكي وسماوي مشع)
+const bgGrad = ctx.createRadialGradient(400, 400, 50, 400, 400, 450);
+bgGrad.addColorStop(0, '#00e5ff');
+bgGrad.addColorStop(0.5, '#0066ff');
+bgGrad.addColorStop(1, '#001a66');
+ctx.fillStyle = bgGrad;
+ctx.fillRect(0, 0, 800, 800);
 
-        <div class="controls" id="controls">
-            <button class="btn" onclick="nextQuestion()">السؤال التالي ➡️</button>
-        </div>
-    </div>
+// 2. رسم دوائر إضاءة خلفية خفيفة
+ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+ctx.beginPath();
+ctx.arc(400, 360, 260, 0, Math.PI * 2);
+ctx.fill();
 
-    <script>
-        const questions = [
-            { q: "أكلة شعبية لذيذة جداً، تُعجن من الدقيق البُر الأبيض والأسمر وتُقدم مع السمن، ما هي؟", options: ["الجريش", "العريكة", "المرقوق"], ans: 1 },
-            { q: "ما هي المحافظة السعودية المشهورة بإنتاج «تمر الصفري الملكي»؟", options: ["الأحساء", "القصيم", "بيشة"], ans: 2 },
-            { q: "في لعبة الدومينو، إذا تم إغلاق اللعب (قفل)، كيف يتم تحديد الفائز؟", options: ["تعادل للجميع", "من يملك أوراقاً بمجموع نقاط أقل", "صاحب أكبر عدد من النقاط"], ans: 1 },
-            { q: "نجم كوميدي مصري قدير، من رواد الكوميديا الحديثة وله أفلام كلاسيكية محبوبة للجميع، من هو؟", options: ["عادل إمام", "محمد هنيدي", "أحمد حلمي"], ans: 1 },
-            { q: "طراز معماري أصيل يتميز بالرواشين الخشبية والنوافذ الجميلة، ما هو؟", options: ["الطراز الحجازي", "الطراز النجدي", "الطراز الجنوبي"], ans: 0 },
-            { q: "حيوان بحري ذكي جداً يمتلك 3 قلوب، و 8 أذرع، ودمه أزرق، ما هو؟", options: ["الحوت الأزرق", "الدولفين", "الأخطبوط"], ans: 2 },
-            { q: "سلالة من الأغنام مشهورة في منطقة «العرضيات» وتتميز بجودة لحمها وملاءمتها للتربية؟", options: ["النعيمي", "الحري", "النجدي"], ans: 1 },
-            { q: "ما هو الشيء الذي يمشي ويقف وليس له أرجل؟", options: ["الساعة", "القلم", "الغيوم"], ans: 0 },
-            { q: "لماذا نرى ضوء «البرق» في السماء قبل أن نسمع صوت «الرعد» بثوانٍ؟", options: ["لأن سرعة الضوء أكبر من سرعة الصوت", "لأن البرق يحدث أولاً", "لأن الغيوم تحبس الصوت لفترة"], ans: 0 },
-            { q: "مرتفعات سعودية تتميز ببرودة جوها وتصلح لزراعة «الفراولة» في البيوت المحمية؟", options: ["مرتفعات عسير", "مرتفعات تبوك", "مرتفعات حائل"], ans: 0 },
-            { q: "أكمل المثل الشعبي الشهير: «مد رجولك على قد ...»؟", options: ["فراشك", "لحافك", "بساطك"], ans: 1 },
-            { q: "ما هي أطول سورة في القرآن الكريم؟", options: ["سورة النساء", "سورة آل عمران", "سورة البقرة"], ans: 2 },
-            { q: "شيء كلما أخذت منه كبر وكلما وضعت فيه صغر؟", options: ["العمر", "الحفرة", "البالون"], ans: 1 },
-            { q: "أي طائر ينام غالباً واقفاً على رجل واحدة للحفاظ على حرارة جسمه؟", options: ["النعامة", "طائر النورس", "طائر الفلامنجو (النحام)"], ans: 2 },
-            { q: "بيت لا فيه أبواب ولا نوافذ، وإذا انكسر ما يتصلح أبداً، ما هو؟", options: ["البيضة", "الزجاج", "الخيمة"], ans: 0 },
-            { q: "كم عدد السجدات التلاوية في القرآن الكريم؟", options: ["11 سجدة", "15 سجدة", "14 سجدة"], ans: 1 },
-            { q: "أضخم حيوان يعيش على كوكب الأرض حالياً؟", options: ["الفيل الأفريقي", "الحوت الأزرق", "القرش الأبيض"], ans: 1 },
-            { q: "إذا كان معك 50 ريال واشتريت 3 ألعاب كل لعبة بـ 10 ريال، كم يتبقى معك؟", options: ["20 ريال", "30 ريال", "10 ريال"], ans: 0 },
-            { q: "من الفنون والأهازيج الشعبية القديمة في محايل عسير ورجال ألمع؟", options: ["المزمار", "الخطوة والدمة", "السامري"], ans: 1 },
-            { q: "ما هو الكوكب الذي يُطلق عليه اسم «الكوكب الأحمر»؟", options: ["المشتري", "الزهرة", "المريخ"], ans: 2 }
-        ];
+// 3. دالة رسم النجوم اللامعة
+function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
+  let rot = Math.PI / 2 * 3;
+  let x = cx;
+  let y = cy;
+  let step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outerRadius);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outerRadius;
+    y = cy + Math.sin(rot) * outerRadius;
+    ctx.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * innerRadius;
+    y = cy + Math.sin(rot) * innerRadius;
+    ctx.lineTo(x, y);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outerRadius);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowColor = '#ffff00';
+  ctx.shadowBlur = 15;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
 
-        let currentQuestion = 0;
-        let scores = [0, 0, 0];
-        let answered = false;
+drawStar(160, 220, 5, 35, 15, '#ffd700');
+drawStar(650, 200, 5, 45, 20, '#ffd700');
+drawStar(140, 480, 4, 25, 10, '#ffffff');
+drawStar(670, 460, 4, 30, 12, '#ffffff');
 
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const controls = document.getElementById('controls');
-        const progressText = document.getElementById('q-progress');
+// 4. رسم علامة الاستفهام ثلاثية الأبعاد (؟)
+ctx.save();
+ctx.font = '900 380px "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
 
-        function changeScore(teamIndex, amount) {
-            scores[teamIndex] += amount;
-            // منع النقاط من النزول تحت الصفر
-            if(scores[teamIndex] < 0) scores[teamIndex] = 0;
-            document.getElementById(`score-${teamIndex}`).innerText = scores[teamIndex];
-        }
+// ظل ثلاثي الأبعاد للعلامة
+ctx.fillStyle = '#cc5200';
+ctx.fillText('?', 412, 345);
 
-        function loadQuestion() {
-            if (currentQuestion >= questions.length) {
-                progressText.innerHTML = "النهاية";
-                questionText.innerHTML = "🎉 انتهت المسابقة! راجعوا النقاط في الأعلى لمعرفة بطل العائلة 🎉";
-                optionsContainer.innerHTML = "";
-                controls.style.display = "none";
-                return;
-            }
+// حدود سوداء/بيضاء لإبراز العلامة
+ctx.lineWidth = 22;
+ctx.strokeStyle = '#ffffff';
+ctx.strokeText('?', 400, 330);
 
-            answered = false;
-            controls.style.display = "none";
-            progressText.innerHTML = `السؤال ${currentQuestion + 1} من ${questions.length}`;
-            const q = questions[currentQuestion];
-            questionText.innerHTML = q.q;
-            optionsContainer.innerHTML = "";
+// تدرج ذهبي برتقالي لعلامة الاستفهام
+const qGrad = ctx.createLinearGradient(400, 150, 400, 500);
+qGrad.addColorStop(0, '#fffb00');
+qGrad.addColorStop(0.5, '#ffaa00');
+qGrad.addColorStop(1, '#ff5500');
+ctx.fillStyle = qGrad;
+ctx.fillText('?', 400, 330);
+ctx.restore();
 
-            q.options.forEach((opt, index) => {
-                const btn = document.createElement('div');
-                btn.className = 'option';
-                btn.innerHTML = opt;
-                btn.onclick = () => checkAnswer(index, btn);
-                optionsContainer.appendChild(btn);
-            });
-        }
+// 5. رسم شريط الاسم (QuizToon)
+ctx.save();
+// خلفية الشريط
+ctx.fillStyle = '#ff0055';
+ctx.strokeStyle = '#ffffff';
+ctx.lineWidth = 10;
+ctx.beginPath();
+ctx.roundRect(140, 540, 520, 125, 60);
+ctx.fill();
+ctx.stroke();
 
-        function checkAnswer(selectedIndex, btnElement) {
-            if (answered) return;
-            answered = true;
+// كتابة اسم القناة QuizToon
+ctx.font = '900 90px "Arial Rounded MT Bold", Arial, sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillStyle = '#ffffff';
+ctx.shadowColor = 'rgba(0,0,0,0.4)';
+ctx.shadowBlur = 10;
+ctx.shadowOffsetY = 5;
+ctx.fillText('QuizToon', 400, 605);
+ctx.restore();
 
-            const correctIndex = questions[currentQuestion].ans;
-            const allOptions = optionsContainer.children;
-
-            if (selectedIndex === correctIndex) {
-                btnElement.classList.add('correct');
-            } else {
-                btnElement.classList.add('wrong');
-                allOptions[correctIndex].classList.add('correct');
-            }
-            
-            // إظهار زر السؤال التالي في كل الحالات
-            controls.style.display = "flex";
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            loadQuestion();
-        }
-
-        loadQuestion();
-    </script>
+// وظيفة تحميل الصورة
+function downloadLogo() {
+  const link = document.createElement('a');
+  link.download = 'QuizToon_Logo.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
 </body>
 </html>
-
